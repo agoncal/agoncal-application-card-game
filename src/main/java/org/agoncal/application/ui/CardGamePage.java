@@ -13,13 +13,13 @@ import javax.ws.rs.core.MediaType;
 @Path("/some-page")
 public class CardGamePage {
 
-    @Inject
-    Template page;
+  @Inject
+  Template page;
 
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance get(@QueryParam("name") String name) {
-        return page.data("name", name);
-    }
+  @GET
+  @Produces(MediaType.TEXT_HTML)
+  public TemplateInstance get(@QueryParam("name") String name) {
+    return page.data("name", name);
+  }
 
 }

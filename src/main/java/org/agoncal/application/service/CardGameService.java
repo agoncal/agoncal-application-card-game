@@ -45,188 +45,171 @@ package org.agoncal.application.service;/*
  */
 
 import org.agoncal.application.model.Card;
-import org.agoncal.application.model.Deck;
+import org.agoncal.application.model.Game;
 import org.agoncal.application.model.Player;
 
-import java.util.ArrayList;
+import javax.enterprise.context.ApplicationScoped;
 import java.util.Random;
 
+@ApplicationScoped
 public class CardGameService {
-    // Attributes
 
-    private static Player playerOne = new Player("Bob");
-    private static Player playerTwo = new Player("Alice");
-    private static Player currentPlayer = playerOne;
-    private static Deck deck = new Deck(true); // Shuffle deck automatically
-    private static ArrayList<Card> table = new ArrayList<>();
-    private static int roundsPlayed = 1;
-    private static boolean gameOver = false;
+  // Deal 26 cards to each hand in alternating order
+  public Game dealCards(Game game) {
+    for (int i = 0; i < 26; i++) {
+      game.getPlayerOne().takeCard(game.getDeck().deal());
+      game.getPlayerTwo().takeCard(game.getDeck().deal());
+    }
+    return game;
+  }
 
-    // Methods
+  // Choose who goes first
+  public Game chooseFirstPlayer(Game game) {
+    Random random = new Random();
+    int n = random.nextInt(2);
 
-    // Play the simple card game
-    public static void playGame() {
-        System.out.println("Starting simple card game simulation...");
-        System.out.println();
+    if (n == 1) { // Make playerTwo the new playerOne
+      Player temp = game.getPlayerOne();
+      game.setPlayerOne(game.getPlayerTwo());
+      game.setPlayerTwo(temp);
+    }
+    return game;
+  }
 
-        dealCards(); // Deal 26 cards to each player
-        chooseFirstPlayer(); // Choose who goes first
-        playRounds(); // Start the rounds
-        declareWinner(); // Declare a winner
+  // Play rounds, max 10
+  public Game playRounds(Game game) {
+    while (game.getRoundsPlayed() <= 10 && (game.isGameOver() == false)) {
+      // Display the round number
+      System.out.println("ROUND " + game.getRoundsPlayed());
+      System.out.println();
+
+      // Display each player's hand
+      displayHands(game);
+
+      // Play individual round
+      playRound(game);
+
+      // Increment roundsPlayed counter
+      game.setRoundsPlayed(game.getRoundsPlayed() + 1);
+    }
+    return game;
+  }
+
+  // Play an individual round
+  public void playRound(Game game) {
+    boolean suitMatch = false; // Flag for notifying a suit match
+    Card cardToPlay;
+
+    if ((game.getPlayerOne().getHandSize() == 52) || (game.getPlayerTwo().getHandSize() == 52)) {
+      game.setGameOver(true);
     }
 
-    // Deal 26 cards to each hand in alternating order
-    public static void dealCards() {
-        for (int i = 0; i < 26; i++) {
-            playerOne.takeCard(deck.deal());
-            playerTwo.takeCard(deck.deal());
-        }
+    while (suitMatch == false) {
+      // Current player places card on table
+      cardToPlay = game.getCurrentPlayer().playCard();
+      game.getTable().add(cardToPlay);
+
+      // Check if there's a suit match
+      suitMatch = checkSuitMatch(game);
+
+      if (suitMatch == false)
+        switchCurrentPlayer(game);
     }
 
-    // Choose who goes first
-    public static void chooseFirstPlayer() {
-        Random random = new Random();
-        int n = random.nextInt(2);
+    game = collectCards(game);
+    System.out.println();
 
-        if (n == 1) { // Make playerTwo the new playerOne
-            Player temp = playerOne;
-            playerOne = playerTwo;
-            playerTwo = temp;
-        }
+    // Sleep for a second before beginning a new round
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e) {
+    }
+  }
+
+  // Switch current player
+  public Game switchCurrentPlayer(Game game) {
+    if (game.getCurrentPlayer() == game.getPlayerOne())
+      game.setCurrentPlayer(game.getPlayerTwo());
+    else if (game.getCurrentPlayer() == game.getPlayerTwo())
+      game.setCurrentPlayer(game.getPlayerOne());
+
+    return game;
+  }
+
+  // Check for a suit match
+  public boolean checkSuitMatch(Game game) {
+    int tableSize = game.getTable().size();
+    int lastSuit;
+    int topSuit;
+
+    if (tableSize < 2) {
+      return false;
+    } else {
+      lastSuit = game.getTable().get(tableSize - 1).getSuit();
+      topSuit = game.getTable().get(tableSize - 2).getSuit();
     }
 
-    // Play rounds, max 10
-    public static void playRounds() {
-        while (roundsPlayed <= 10 && (gameOver == false)) {
-            // Display the round number
-            System.out.println("ROUND " + roundsPlayed);
-            System.out.println();
+    // Check suit equivalence
+    if (lastSuit == topSuit) {
+      System.out.println();
+      System.out.println(game.getCurrentPlayer().getName() + " wins the round!");
+      System.out.println();
 
-            // Display each player's hand
-            displayHands();
-
-            // Play individual round
-            playRound();
-
-            // Increment roundsPlayed counter
-            roundsPlayed++;
-        }
+      return true;
     }
 
-    // Play an individual round
-    public static void playRound() {
-        boolean suitMatch = false; // Flag for notifying a suit match
-        Card cardToPlay;
+    return false;
+  }
 
-        if ((playerOne.handSize() == 52) || (playerTwo.handSize() == 52)) {
-            gameOver = true;
-        }
+  // Collect cards from table
+  public Game collectCards(Game game) {
+    // Print a message
+    System.out.print(game.getCurrentPlayer().getName() + " takes the table (" + game.getTable().size() + "): ");
+    displayTable(game);
 
-        while (suitMatch == false) {
-            // Current player places card on table
-            cardToPlay = currentPlayer.playCard();
-            table.add(cardToPlay);
-
-            // Check if there's a suit match
-            suitMatch = checkSuitMatch();
-
-            if (suitMatch == false)
-                switchCurrentPlayer();
-        }
-
-        collectCards();
-        System.out.println();
-
-        // Sleep for a second before beginning a new round
-        try {
-            Thread.sleep(500);
-        }
-        catch (InterruptedException e) {
-        }
+    // Player takes each card from the table and adds to hand
+    for (int i = 0; i < game.getTable().size(); i++) {
+      Card cardToTake = game.getTable().get(i);
+      game.getCurrentPlayer().takeCard(cardToTake);
     }
 
-    // Switch current player
-    public static void switchCurrentPlayer() {
-        if (currentPlayer == playerOne)
-            currentPlayer = playerTwo;
-        else if (currentPlayer == playerTwo)
-            currentPlayer = playerOne;
+    game.getTable().clear();
+
+    return game;
+  }
+
+  // Displays all the cards currently on the table
+  public void displayTable(Game game) {
+    for (int i = 0; i < game.getTable().size(); i++) {
+      if (game.getTable().get(i) != null) {
+        System.out.print(game.getTable().get(i).getName() + " ");
+      }
     }
 
-    // Check for a suit match
-    public static boolean checkSuitMatch() {
-        int tableSize = table.size();
-        int lastSuit;
-        int topSuit;
+    System.out.println();
+    System.out.println();
+  }
 
-        if (tableSize < 2) {
-            return false;
-        }
-        else {
-            lastSuit = table.get(tableSize - 1).getSuit();
-            topSuit = table.get(tableSize - 2).getSuit();
-        }
+  // Displays each player's current hand
+  public void displayHands(Game game) {
+    game.getPlayerOne().displayHand();
+    game.getPlayerTwo().displayHand();
+  }
 
-        // Check suit equivalence
-        if (lastSuit == topSuit) {
-            System.out.println();
-            System.out.println(currentPlayer.getName() + " wins the round!");
-            System.out.println();
-
-            return true;
-        }
-
-        return false;
+  // Declare a winner
+  public Game declareWinner(Game game) {
+    if (game.getPlayerOne().getHandSize() > game.getPlayerTwo().getHandSize()) {
+      System.out.println(game.getPlayerOne().getName().toUpperCase() + " WINS " +
+        "WITH A TOTAL OF " + game.getPlayerOne().getHandSize() + " CARDS!");
+    } else if (game.getPlayerTwo().getHandSize() > game.getPlayerOne().getHandSize()) {
+      System.out.println(game.getPlayerTwo().getName().toUpperCase() + " WINS " +
+        "WITH A TOTAL OF " + game.getPlayerTwo().getHandSize() + " CARDS!");
+    } else {
+      System.out.println("TIE! WOW IT'S SUPER RARE!");
     }
 
-    // Collect cards from table
-    public static void collectCards() {
-        // Print a message
-        System.out.print(currentPlayer.getName() + " takes the table (" +
-            table.size() + "): ");
-        displayTable();
+    System.out.println();
 
-        // Player takes each card from the table and adds to hand
-        for (int i = 0; i < table.size(); i++) {
-            Card cardToTake = table.get(i);
-            currentPlayer.takeCard(cardToTake);
-        }
-
-        table.clear();
-    }
-
-    // Displays all the cards currently on the table
-    public static void displayTable() {
-        for (int i = 0; i < table.size(); i++) {
-            if (table.get(i) != null) {
-                System.out.print(table.get(i).getName() + " ");
-            }
-        }
-
-        System.out.println();
-        System.out.println();
-    }
-
-    // Displays each player's current hand
-    public static void displayHands() {
-        playerOne.displayHand();
-        playerTwo.displayHand();
-    }
-
-    // Declare a winner
-    public static void declareWinner() {
-        if (playerOne.handSize() > playerTwo.handSize()) {
-            System.out.println(playerOne.getName().toUpperCase() + " WINS " +
-                "WITH A TOTAL OF " + playerOne.handSize() + " CARDS!");
-        }
-        else if (playerTwo.handSize() > playerOne.handSize()) {
-            System.out.println(playerTwo.getName().toUpperCase() + " WINS " +
-                "WITH A TOTAL OF " + playerTwo.handSize() + " CARDS!");
-        }
-        else {
-            System.out.println("TIE! WOW IT'S SUPER RARE!");
-        }
-
-        System.out.println();
-    }
+    return game;
+  }
 }

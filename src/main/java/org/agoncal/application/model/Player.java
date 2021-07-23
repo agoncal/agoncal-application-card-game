@@ -8,7 +8,7 @@ package org.agoncal.application.model;/*
  * Player.java
  * Player class.
  *
- * CITATION: 
+ * CITATION:
  * Java Programming: From the Ground Up by Bravaco, Simonson
  * Page 496
  *
@@ -19,42 +19,42 @@ package org.agoncal.application.model;/*
  */
 
 public class Player {
-     // Attributes
+  // Attributes
 
-     private Hand hand;
-     private String name;
+  private Hand hand;
+  private String name;
 
-     // Default constructor
+  // Default constructor
 
-     public Player(String name) {
-          hand = new Hand(); // Instantiate new hand object
-          this.name = name;
-     }
+  public Player(String name) {
+    hand = new Hand(); // Instantiate new hand object
+    this.name = name;
+  }
 
-     // Methods
+  // Methods
 
-     public Card playCard() {
-          Card c = hand.playCard();
-          System.out.println(String.format("%5s", name) + " plays a " + c.getName() + "!");
+  public Card playCard() {
+    Card c = hand.playCard();
+    System.out.println(String.format("%5s", name) + " plays a " + c.getName() + "!");
 
-          return c;
-     }
+    return c;
+  }
 
-     public void takeCard(Card card) {
-          hand.addCard(card);
-     }
+  public void takeCard(Card card) {
+    hand.addCard(card);
+  }
 
-     public String getName() {
-          return name;
-     }
+  public String getName() {
+    return name;
+  }
 
-     public void displayHand() {
-          System.out.println(name + "\'s hand (" + hand.getSize() + "):");
-          hand.display();
-          System.out.println();
-     }
+  public void displayHand() {
+    System.out.println(name + "\'s hand (" + hand.getSize() + "):");
+    hand.display();
+    System.out.println();
+  }
 
-     public int handSize() {
-          return hand.getSize();
-     }
+  public int getHandSize() {
+    return hand.getSize();
+  }
 }
