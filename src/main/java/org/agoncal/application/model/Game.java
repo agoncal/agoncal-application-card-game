@@ -15,6 +15,8 @@ public class Game {
   private int roundsPlayed = 1;
   private boolean gameOver = false;
 
+  public static final int MAX_ROUND = 10;
+
   public Game() {
     this.playerOne = new Player("Bob");
     this.playerTwo = new Player("Alice");
@@ -79,6 +81,8 @@ public class Game {
   }
 
   public boolean isGameOver() {
+    if (roundsPlayed > MAX_ROUND)
+      gameOver = true;
     return gameOver;
   }
 

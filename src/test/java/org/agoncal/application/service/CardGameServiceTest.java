@@ -7,7 +7,6 @@ import org.agoncal.application.model.Player;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +78,6 @@ class CardGameServiceTest {
     assertFalse(service.checkSuitMatch(game));
   }
 
-
   @Test
   public void shouldCollectCards() {
     Game game = new Game();
@@ -87,6 +85,17 @@ class CardGameServiceTest {
     assertEquals(2, game.getTable().size());
     game = service.collectCards(game);
     assertEquals(0, game.getTable().size());
+  }
+
+  @Test
+  public void shouldPlayRoundOver() {
+    Game game = new Game();
+    Player playerOne = game.getPlayerOne();
+    for (int i = 0; i < 52; i++) {
+      playerOne.takeCard(new Card());
+    }
+    game = service.playRound(game);
+    assertTrue(game.isGameOver());
   }
 
 }

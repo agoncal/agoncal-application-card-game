@@ -78,30 +78,17 @@ public class CardGameService {
 
   // Play rounds, max 10
   public Game playRounds(Game game) {
-    while (game.getRoundsPlayed() <= 10 && (game.isGameOver() == false)) {
-      // Display the round number
-      System.out.println("ROUND " + game.getRoundsPlayed());
-      System.out.println();
-
-      // Display each player's hand
-      displayHands(game);
-
-      // Play individual round
-      playRound(game);
-
-      // Increment roundsPlayed counter
-      game.setRoundsPlayed(game.getRoundsPlayed() + 1);
-    }
     return game;
   }
 
   // Play an individual round
-  public void playRound(Game game) {
+  public Game playRound(Game game) {
     boolean suitMatch = false; // Flag for notifying a suit match
     Card cardToPlay;
 
     if ((game.getPlayerOne().getHandSize() == 52) || (game.getPlayerTwo().getHandSize() == 52)) {
       game.setGameOver(true);
+      return game;
     }
 
     while (suitMatch == false) {
@@ -124,6 +111,10 @@ public class CardGameService {
       Thread.sleep(500);
     } catch (InterruptedException e) {
     }
+
+    // Increment roundsPlayed counter
+    game.setRoundsPlayed(game.getRoundsPlayed() + 1);
+    return game;
   }
 
   // Switch current player
@@ -191,10 +182,6 @@ public class CardGameService {
   }
 
   // Displays each player's current hand
-  public void displayHands(Game game) {
-    game.getPlayerOne().displayHand();
-    game.getPlayerTwo().displayHand();
-  }
 
   // Declare a winner
   public Game declareWinner(Game game) {

@@ -1,22 +1,9 @@
-package org.agoncal.application.model;/*
- * Matt Levan
- * CSC 331, Dr. Amlan Chatterjee
- * Data Structures
- *
- * Project 3 -- Simple Card Game
- *
- * Player.java
+package org.agoncal.application.model;
+/*
  * Player class.
- *
- * CITATION:
- * Java Programming: From the Ground Up by Bravaco, Simonson
- * Page 496
- *
- * Original code modified to fit the needs of the project.
- *
- * Due in full by 11/14/2015 @ midnight
- *
  */
+
+import java.util.LinkedList;
 
 public class Player {
   // Attributes
@@ -48,13 +35,11 @@ public class Player {
     return name;
   }
 
-  public void displayHand() {
-    System.out.println(name + "\'s hand (" + hand.getSize() + "):");
-    hand.display();
-    System.out.println();
+  public LinkedList<Card> getCards() {
+    return hand.getCards();
   }
 
   public int getHandSize() {
-    return hand.getSize();
+    return hand.getHandSize();
   }
 }
