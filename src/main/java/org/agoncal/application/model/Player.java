@@ -31,10 +31,7 @@ public class Player {
   // ======================================
 
   public Card playCard() {
-    Card c = cards.removeFirst();
-    System.out.println(String.format("%5s", name) + " plays a " + c.getName() + "!");
-
-    return c;
+    return cards.removeFirst();
   }
 
   public void takeCard(Card card) {

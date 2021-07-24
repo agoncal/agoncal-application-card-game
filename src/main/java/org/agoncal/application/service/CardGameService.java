@@ -58,7 +58,12 @@ import static org.agoncal.application.model.Deck.NUMBER_OF_CARDS;
 @ApplicationScoped
 public class CardGameService {
 
-  public Game startGame(Game game) {
+  // ======================================
+  // =              Methods               =
+  // ======================================
+
+  public Game startGame() {
+    Game game = new Game();
 
     // Deals 26 cards to each player in alternating order
     Deck deck = new Deck();
@@ -93,6 +98,7 @@ public class CardGameService {
     while (suitMatch == false) {
       // Current player places card on table
       cardToPlay = game.getCurrentPlayer().playCard();
+      System.out.println(String.format("%5s", game.getCurrentPlayer().getName()) + " plays a " + cardToPlay.getName() + "!");
       game.getTable().add(cardToPlay);
 
       // Check if there's a suit match
@@ -116,6 +122,27 @@ public class CardGameService {
     return game;
   }
 
+  // Declare a winner
+  public Game declareWinner(Game game) {
+    if (game.getPlayerOne().getHandSize() > game.getPlayerTwo().getHandSize()) {
+      System.out.println(game.getPlayerOne().getName().toUpperCase() + " WINS " +
+        "WITH A TOTAL OF " + game.getPlayerOne().getHandSize() + " CARDS!");
+    } else if (game.getPlayerTwo().getHandSize() > game.getPlayerOne().getHandSize()) {
+      System.out.println(game.getPlayerTwo().getName().toUpperCase() + " WINS " +
+        "WITH A TOTAL OF " + game.getPlayerTwo().getHandSize() + " CARDS!");
+    } else {
+      System.out.println("TIE! WOW IT'S SUPER RARE!");
+    }
+
+    System.out.println();
+
+    return game;
+  }
+
+  // ======================================
+  // =          Private Methods           =
+  // ======================================
+
   // Switch current player
   Game switchCurrentPlayer(Game game) {
     if (game.getCurrentPlayer() == game.getPlayerOne())
@@ -127,7 +154,7 @@ public class CardGameService {
   }
 
   // Check for a suit match
-  public boolean checkSuitMatch(Game game) {
+  boolean checkSuitMatch(Game game) {
     int tableSize = game.getTable().size();
     Suit lastSuit;
     Suit topSuit;
@@ -152,7 +179,7 @@ public class CardGameService {
   }
 
   // Collect cards from table
-  public Game collectCards(Game game) {
+  Game collectCards(Game game) {
     // Print a message
     System.out.print(game.getCurrentPlayer().getName() + " takes the table (" + game.getTable().size() + "): ");
     displayTable(game);
@@ -169,7 +196,7 @@ public class CardGameService {
   }
 
   // Displays all the cards currently on the table
-  public void displayTable(Game game) {
+  void displayTable(Game game) {
     for (int i = 0; i < game.getTable().size(); i++) {
       if (game.getTable().get(i) != null) {
         System.out.print(game.getTable().get(i).getName() + " ");
@@ -178,22 +205,5 @@ public class CardGameService {
 
     System.out.println();
     System.out.println();
-  }
-
-  // Declare a winner
-  public Game declareWinner(Game game) {
-    if (game.getPlayerOne().getHandSize() > game.getPlayerTwo().getHandSize()) {
-      System.out.println(game.getPlayerOne().getName().toUpperCase() + " WINS " +
-        "WITH A TOTAL OF " + game.getPlayerOne().getHandSize() + " CARDS!");
-    } else if (game.getPlayerTwo().getHandSize() > game.getPlayerOne().getHandSize()) {
-      System.out.println(game.getPlayerTwo().getName().toUpperCase() + " WINS " +
-        "WITH A TOTAL OF " + game.getPlayerTwo().getHandSize() + " CARDS!");
-    } else {
-      System.out.println("TIE! WOW IT'S SUPER RARE!");
-    }
-
-    System.out.println();
-
-    return game;
   }
 }

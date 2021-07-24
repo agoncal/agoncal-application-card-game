@@ -26,8 +26,7 @@ public class CardGameMain {
     System.out.println();
 
     // Starts the game
-    Game game = new Game();
-    game = service.startGame(game);
+    Game game = service.startGame();
 
     // Play rounds
     while (!game.isGameOver()) {

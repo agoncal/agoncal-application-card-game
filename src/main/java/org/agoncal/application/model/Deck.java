@@ -33,14 +33,19 @@ public class Deck {
   // =              Methods               =
   // ======================================
 
-  public Card dealOneCard() { // Deals one card at a time
+  // Deals one card at a time
+  public Card dealOneCard() {
     Card c = cards[next];
     next++;
     return c;
   }
 
+  // ======================================
+  // =          Private Methods           =
+  // ======================================
+
   private void createDeck() {
-    cards = new Card[NUMBER_OF_CARDS+1]; // Indices 1-52 (does not use index 0)
+    cards = new Card[NUMBER_OF_CARDS + 1]; // Indices 1-52 (does not use index 0)
 
     // Fill the deck with cards
     for (int rank = 1; rank <= 13; rank++) {
@@ -54,6 +59,7 @@ public class Deck {
     next = 1; // Set next to 1 since first card is in index 1
 
   }
+
   private void shuffleDeck() {
     Random randomNumber = new Random();
 
