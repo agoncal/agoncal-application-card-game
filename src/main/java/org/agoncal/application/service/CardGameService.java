@@ -53,7 +53,7 @@ import org.agoncal.application.model.Suit;
 import javax.enterprise.context.ApplicationScoped;
 import java.util.Random;
 
-import static org.agoncal.application.model.Deck.NUMBER_OF_CARDS;
+import static org.agoncal.application.model.Game.NUMBER_OF_CARDS;
 
 @ApplicationScoped
 public class CardGameService {
@@ -62,7 +62,7 @@ public class CardGameService {
   // =              Methods               =
   // ======================================
 
-  public Game startGame() {
+  public Game startsANewGame() {
     Game game = new Game();
 
     // Deals 26 cards to each player in alternating order
@@ -76,7 +76,8 @@ public class CardGameService {
     Random random = new Random();
     int n = random.nextInt(2);
 
-    if (n == 1) { // Make playerTwo the new playerOne
+    if (n == 1) {
+      // Make playerTwo the new playerOne
       Player temp = game.getPlayerOne();
       game.setPlayerOne(game.getPlayerTwo());
       game.setPlayerTwo(temp);
@@ -86,29 +87,36 @@ public class CardGameService {
   }
 
   // Play an individual round
-  public Game playRound(Game game) {
-    boolean suitMatch = false; // Flag for notifying a suit match
+  // Play an individual round
+  public Game playsSeveralRounds(Game game) {
+    boolean suitFight = false; // Flag for notifying a suit fight
     Card cardToPlay;
 
-    if ((game.getPlayerOne().getHandSize() == 52) || (game.getPlayerTwo().getHandSize() == 52)) {
+    // If one player reaches 52 cards, then it's the end of the game, the player won
+    if ((game.getPlayerOne().getHandSize() == NUMBER_OF_CARDS) || (game.getPlayerTwo().getHandSize() == NUMBER_OF_CARDS)) {
       game.setGameOver(true);
       return game;
     }
 
-    while (suitMatch == false) {
+    System.out.println("--- Cards on the table");
+    while (!suitFight) {
       // Current player places card on table
       cardToPlay = game.getCurrentPlayer().playCard();
       System.out.println(String.format("%5s", game.getCurrentPlayer().getName()) + " plays a " + cardToPlay.getName() + "!");
       game.getTable().add(cardToPlay);
 
       // Check if there's a suit match
-      suitMatch = checkSuitMatch(game);
+      suitFight = checkSuitFight(game);
 
-      if (suitMatch == false)
+      if (!suitFight)
         switchCurrentPlayer(game);
     }
 
-    game = collectCards(game);
+    // Print a message
+    System.out.print(game.getCurrentPlayer().getName() + " takes the table (" + game.getTable().size() + "): ");
+    displayTable(game);
+
+    game = currentPlayerCollectTableCards(game);
     System.out.println();
 
     // Sleep for a second before beginning a new round
@@ -117,25 +125,8 @@ public class CardGameService {
     } catch (InterruptedException e) {
     }
 
-    // Increment roundsPlayed counter
-    game.setRoundsPlayed(game.getRoundsPlayed() + 1);
-    return game;
-  }
-
-  // Declare a winner
-  public Game declareWinner(Game game) {
-    if (game.getPlayerOne().getHandSize() > game.getPlayerTwo().getHandSize()) {
-      System.out.println(game.getPlayerOne().getName().toUpperCase() + " WINS " +
-        "WITH A TOTAL OF " + game.getPlayerOne().getHandSize() + " CARDS!");
-    } else if (game.getPlayerTwo().getHandSize() > game.getPlayerOne().getHandSize()) {
-      System.out.println(game.getPlayerTwo().getName().toUpperCase() + " WINS " +
-        "WITH A TOTAL OF " + game.getPlayerTwo().getHandSize() + " CARDS!");
-    } else {
-      System.out.println("TIE! WOW IT'S SUPER RARE!");
-    }
-
-    System.out.println();
-
+    // Increment rounds played counter
+    game.incrementRound();
     return game;
   }
 
@@ -154,24 +145,21 @@ public class CardGameService {
   }
 
   // Check for a suit match
-  boolean checkSuitMatch(Game game) {
+  boolean checkSuitFight(Game game) {
     int tableSize = game.getTable().size();
-    Suit lastSuit;
-    Suit topSuit;
-
     if (tableSize < 2) {
+      // You need two cards to fight
       return false;
-    } else {
-      lastSuit = game.getTable().get(tableSize - 1).getSuit();
-      topSuit = game.getTable().get(tableSize - 2).getSuit();
     }
 
-    // Check suit equivalence
+    Suit  lastSuit = game.getTable().get(tableSize - 1).getSuit();
+    Suit  topSuit = game.getTable().get(tableSize - 2).getSuit();
+
+    // If the suits are equivalence, then the current player wins the fight
     if (lastSuit == topSuit) {
       System.out.println();
       System.out.println(game.getCurrentPlayer().getName() + " wins the round!");
       System.out.println();
-
       return true;
     }
 
@@ -179,19 +167,14 @@ public class CardGameService {
   }
 
   // Collect cards from table
-  Game collectCards(Game game) {
-    // Print a message
-    System.out.print(game.getCurrentPlayer().getName() + " takes the table (" + game.getTable().size() + "): ");
-    displayTable(game);
-
-    // Player takes each card from the table and adds to hand
+  Game currentPlayerCollectTableCards(Game game) {
+    // Current player takes each card from the table and adds to hand
     for (int i = 0; i < game.getTable().size(); i++) {
       Card cardToTake = game.getTable().get(i);
       game.getCurrentPlayer().takeCard(cardToTake);
     }
 
     game.getTable().clear();
-
     return game;
   }
 
@@ -203,7 +186,6 @@ public class CardGameService {
       }
     }
 
-    System.out.println();
     System.out.println();
   }
 }

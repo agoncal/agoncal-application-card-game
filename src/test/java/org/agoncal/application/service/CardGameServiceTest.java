@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
@@ -28,7 +29,7 @@ class CardGameServiceTest {
 
   @Test
   public void shouldStartGame() {
-    Game game = service.startGame();
+    Game game = service.startsANewGame();
     assertEquals(0, game.getTable().size());
     assertEquals(26, game.getPlayerOne().getHandSize());
     assertEquals(26, game.getPlayerTwo().getHandSize());
@@ -42,7 +43,7 @@ class CardGameServiceTest {
 
   @Test
   public void shouldSwitchCurrentPlayer() {
-    Game game = service.startGame();
+    Game game = service.startsANewGame();
     Player currentPlayer = game.getCurrentPlayer();
     assertEquals(currentPlayer, game.getCurrentPlayer());
 
@@ -55,46 +56,46 @@ class CardGameServiceTest {
 
   @Test
   public void shouldCheckSuitMatchLowerTwo() {
-    Game game = service.startGame();
+    Game game = service.startsANewGame();
     assertEquals(0, game.getTable().size());
-    assertFalse(service.checkSuitMatch(game));
+    assertFalse(service.checkSuitFight(game));
   }
 
   @Test
   public void shouldCheckSuitMatchSameSuit() {
-    Game game = service.startGame();
+    Game game = service.startsANewGame();
     assertEquals(0, game.getTable().size());
     game.setTable(List.of(new Card(), new Card()));
     assertEquals(2, game.getTable().size());
-    assertTrue(service.checkSuitMatch(game));
+    assertTrue(service.checkSuitFight(game));
   }
 
   @Test
   public void shouldCheckSuitMatchDifferentSuit() {
-    Game game = service.startGame();
+    Game game = service.startsANewGame();
     assertEquals(0, game.getTable().size());
     game.setTable(List.of(new Card(DIAMONDS, 1), new Card(HEARTS, 1)));
     assertEquals(2, game.getTable().size());
-    assertFalse(service.checkSuitMatch(game));
+    assertFalse(service.checkSuitFight(game));
   }
 
   @Test
   public void shouldCollectCards() {
-    Game game = service.startGame();
+    Game game = service.startsANewGame();
     game.setTable(new ArrayList<>(List.of(new Card(DIAMONDS, 1), new Card(CLUBS, 1))));
     assertEquals(2, game.getTable().size());
-    game = service.collectCards(game);
+    game = service.currentPlayerCollectTableCards(game);
     assertEquals(0, game.getTable().size());
   }
 
   @Test @Disabled
   public void shouldPlayRoundOver() {
-    Game game = service.startGame();
+    Game game = service.startsANewGame();
     Player playerOne = game.getPlayerOne();
     for (int i = 0; i < 52; i++) {
       playerOne.takeCard(new Card());
     }
-    game = service.playRound(game);
+    game = service.playsSeveralRounds(game);
     assertTrue(game.isGameOver());
   }
 

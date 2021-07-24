@@ -10,27 +10,30 @@ import org.agoncal.application.service.CardGameService;
 
 import static org.agoncal.application.model.Game.MAX_ROUND;
 
-public class CardGameMain {
+public class PlaySeveralRoundsMain {
 
   // Main method
 
   private CardGameService service = new CardGameService();
 
   public static void main(String[] args) {
-    new CardGameMain().playGame();
+    new PlaySeveralRoundsMain().playGame();
   }
 
   // Play the simple card game
   public void playGame() {
-    System.out.println("Starting simple card game simulation...");
+
+    // Starts a new game
+    Game game = service.startsANewGame();
+    System.out.println("#####################");
+    System.out.println("New game has started between " + game.getPlayerOne() + " and " + game.getPlayerTwo());
+    System.out.println(game.getCurrentPlayer() + " starts the game");
     System.out.println();
 
-    // Starts the game
-    Game game = service.startGame();
-
-    // Play rounds
+    // Play rounds until the game is over
     while (!game.isGameOver()) {
       // Display the round number
+      System.out.println("==================");
       System.out.println("ROUND " + game.getRoundsPlayed() + " out of " + MAX_ROUND);
       System.out.println();
 
@@ -38,12 +41,26 @@ public class CardGameMain {
       displayHands(game);
 
       // Play individual round
-      game = service.playRound(game);
+      game = service.playsSeveralRounds(game);
 
     }
 
     // Declares the winner of the game
-    game = service.declareWinner(game); // Declare a winner
+    declaresTheWinner(game); // Declare a winner
+
+    System.out.println("End of the game");
+    System.out.println("#####################");
+  }
+
+  // Declare a winner
+  private void declaresTheWinner(Game game) {
+    Player theWinner = game.getTheWinner();
+    if (theWinner == null) {
+      System.out.println("TIE! WOW IT'S SUPER RARE!");
+    } else {
+      System.out.println(theWinner.getName().toUpperCase() + " WINS WITH A TOTAL OF " + theWinner.getHandSize() + " CARDS!");
+    }
+    System.out.println();
   }
 
 

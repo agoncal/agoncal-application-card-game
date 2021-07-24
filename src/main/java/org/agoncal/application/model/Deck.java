@@ -5,6 +5,7 @@ package org.agoncal.application.model;
 
 import java.util.Random;
 
+import static org.agoncal.application.model.Game.NUMBER_OF_CARDS;
 import static org.agoncal.application.model.Suit.CLUBS;
 import static org.agoncal.application.model.Suit.DIAMONDS;
 import static org.agoncal.application.model.Suit.HEARTS;
@@ -18,7 +19,6 @@ public class Deck {
 
   private Card cards[]; // An array of Card objects
   private int next; // Holds position of next card to be dealt
-  public static final int NUMBER_OF_CARDS = 52;
 
   // ======================================
   // =            Constructors            =

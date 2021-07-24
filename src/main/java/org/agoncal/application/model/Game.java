@@ -17,6 +17,7 @@ public class Game {
   private boolean gameOver = false;
 
   public static final int MAX_ROUND = 10;
+  public static final int NUMBER_OF_CARDS = 52;
 
   // ======================================
   // =            Constructors            =
@@ -74,8 +75,8 @@ public class Game {
     return roundsPlayed;
   }
 
-  public void setRoundsPlayed(int roundsPlayed) {
-    this.roundsPlayed = roundsPlayed;
+  public void incrementRound() {
+    this.roundsPlayed++;
   }
 
   public boolean isGameOver() {
@@ -86,5 +87,15 @@ public class Game {
 
   public void setGameOver(boolean gameOver) {
     this.gameOver = gameOver;
+  }
+
+  public Player getTheWinner() {
+    if (playerOne.getHandSize() > playerTwo.getHandSize()) {
+      return playerOne;
+    } else if (playerTwo.getHandSize() > playerOne.getHandSize()) {
+      return playerTwo;
+    } else {
+      return null;
+    }
   }
 }
