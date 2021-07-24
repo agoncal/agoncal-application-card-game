@@ -5,20 +5,25 @@ import java.util.List;
 
 public class Game {
 
-  // Attributes
+  // ======================================
+  // =             Attributes             =
+  // ======================================
 
   private Player playerOne;
   private Player playerTwo;
   private Player currentPlayer;
-  private Deck deck = new Deck(true); // Shuffle deck automatically
   private List<Card> table = new ArrayList<>();
   private int roundsPlayed = 1;
   private boolean gameOver = false;
 
   public static final int MAX_ROUND = 10;
 
+  // ======================================
+  // =            Constructors            =
+  // ======================================
+
   public Game() {
-    this.playerOne = new Player("Bob");
+    this.playerOne = new Player();
     this.playerTwo = new Player("Alice");
     this.currentPlayer = playerOne;
   }
@@ -29,8 +34,9 @@ public class Game {
     this.currentPlayer = playerOne;
   }
 
-  // Methods
-
+  // ======================================
+  // =              Methods               =
+  // ======================================
 
   public Player getPlayerOne() {
     return playerOne;
@@ -54,14 +60,6 @@ public class Game {
 
   public void setCurrentPlayer(Player currentPlayer) {
     this.currentPlayer = currentPlayer;
-  }
-
-  public Deck getDeck() {
-    return deck;
-  }
-
-  public void setDeck(Deck deck) {
-    this.deck = deck;
   }
 
   public List<Card> getTable() {

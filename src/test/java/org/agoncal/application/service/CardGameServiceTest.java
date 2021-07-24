@@ -10,6 +10,9 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.agoncal.application.model.Suit.CLUBS;
+import static org.agoncal.application.model.Suit.DIAMONDS;
+import static org.agoncal.application.model.Suit.HEARTS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -24,12 +27,10 @@ class CardGameServiceTest {
   public void shouldDealCards() {
     Game game = new Game();
     assertEquals(0, game.getTable().size());
-    assertEquals(53, game.getDeck().getCards().length);
     assertEquals(0, game.getPlayerOne().getHandSize());
     assertEquals(0, game.getPlayerTwo().getHandSize());
-    game = service.dealCards(game);
+    game = service.startGame(game);
     assertEquals(0, game.getTable().size());
-    assertEquals(53, game.getDeck().getCards().length);
     assertEquals(26, game.getPlayerOne().getHandSize());
     assertEquals(26, game.getPlayerTwo().getHandSize());
   }
@@ -73,7 +74,7 @@ class CardGameServiceTest {
   public void shouldCheckSuitMatchDifferentSuit() {
     Game game = new Game();
     assertEquals(0, game.getTable().size());
-    game.setTable(List.of(new Card(1, 1), new Card(2, 1)));
+    game.setTable(List.of(new Card(DIAMONDS, 1), new Card(HEARTS, 1)));
     assertEquals(2, game.getTable().size());
     assertFalse(service.checkSuitMatch(game));
   }
@@ -81,7 +82,7 @@ class CardGameServiceTest {
   @Test
   public void shouldCollectCards() {
     Game game = new Game();
-    game.setTable(new ArrayList<>(List.of(new Card(1, 1), new Card(2, 1))));
+    game.setTable(new ArrayList<>(List.of(new Card(DIAMONDS, 1), new Card(CLUBS, 1))));
     assertEquals(2, game.getTable().size());
     game = service.collectCards(game);
     assertEquals(0, game.getTable().size());

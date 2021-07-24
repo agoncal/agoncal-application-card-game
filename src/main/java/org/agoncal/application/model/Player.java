@@ -6,29 +6,39 @@ package org.agoncal.application.model;
 import java.util.LinkedList;
 
 public class Player {
-  // Attributes
 
-  private Hand hand;
+  // ======================================
+  // =             Attributes             =
+  // ======================================
+
   private String name;
+  private LinkedList<Card> cards = new LinkedList<>(); // Cards in hand
 
-  // Default constructor
+  // ======================================
+  // =            Constructors            =
+  // ======================================
+
+  public Player() {
+    this.name = "Bob";
+  }
 
   public Player(String name) {
-    hand = new Hand(); // Instantiate new hand object
     this.name = name;
   }
 
-  // Methods
+  // ======================================
+  // =              Methods               =
+  // ======================================
 
   public Card playCard() {
-    Card c = hand.playCard();
+    Card c = cards.removeFirst();
     System.out.println(String.format("%5s", name) + " plays a " + c.getName() + "!");
 
     return c;
   }
 
   public void takeCard(Card card) {
-    hand.addCard(card);
+    cards.add(card);
   }
 
   public String getName() {
@@ -36,10 +46,10 @@ public class Player {
   }
 
   public LinkedList<Card> getCards() {
-    return hand.getCards();
+    return cards;
   }
 
   public int getHandSize() {
-    return hand.getHandSize();
+    return cards.size();
   }
 }

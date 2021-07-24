@@ -25,11 +25,11 @@ public class CardGameMain {
     System.out.println("Starting simple card game simulation...");
     System.out.println();
 
+    // Starts the game
     Game game = new Game();
+    game = service.startGame(game);
 
-    game = service.dealCards(game); // Deal 26 cards to each player
-    game = service.chooseFirstPlayer(game); // Choose who goes first
-
+    // Play rounds
     while (!game.isGameOver()) {
       // Display the round number
       System.out.println("ROUND " + game.getRoundsPlayed() + " out of " + MAX_ROUND);
@@ -43,6 +43,7 @@ public class CardGameMain {
 
     }
 
+    // Declares the winner of the game
     game = service.declareWinner(game); // Declare a winner
   }
 

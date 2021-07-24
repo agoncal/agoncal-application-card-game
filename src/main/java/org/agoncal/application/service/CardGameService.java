@@ -45,26 +45,29 @@ package org.agoncal.application.service;/*
  */
 
 import org.agoncal.application.model.Card;
+import org.agoncal.application.model.Deck;
 import org.agoncal.application.model.Game;
 import org.agoncal.application.model.Player;
+import org.agoncal.application.model.Suit;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.Random;
 
+import static org.agoncal.application.model.Deck.NUMBER_OF_CARDS;
+
 @ApplicationScoped
 public class CardGameService {
 
-  // Deal 26 cards to each hand in alternating order
-  public Game dealCards(Game game) {
-    for (int i = 0; i < 26; i++) {
-      game.getPlayerOne().takeCard(game.getDeck().deal());
-      game.getPlayerTwo().takeCard(game.getDeck().deal());
-    }
-    return game;
-  }
+  public Game startGame(Game game) {
 
-  // Choose who goes first
-  public Game chooseFirstPlayer(Game game) {
+    // Deals 26 cards to each player in alternating order
+    Deck deck = new Deck();
+    for (int i = 0; i < (NUMBER_OF_CARDS / 2); i++) {
+      game.getPlayerOne().takeCard(deck.dealOneCard());
+      game.getPlayerTwo().takeCard(deck.dealOneCard());
+    }
+
+    // Choose which players goes first
     Random random = new Random();
     int n = random.nextInt(2);
 
@@ -73,11 +76,7 @@ public class CardGameService {
       game.setPlayerOne(game.getPlayerTwo());
       game.setPlayerTwo(temp);
     }
-    return game;
-  }
 
-  // Play rounds, max 10
-  public Game playRounds(Game game) {
     return game;
   }
 
@@ -118,7 +117,7 @@ public class CardGameService {
   }
 
   // Switch current player
-  public Game switchCurrentPlayer(Game game) {
+  Game switchCurrentPlayer(Game game) {
     if (game.getCurrentPlayer() == game.getPlayerOne())
       game.setCurrentPlayer(game.getPlayerTwo());
     else if (game.getCurrentPlayer() == game.getPlayerTwo())
@@ -130,8 +129,8 @@ public class CardGameService {
   // Check for a suit match
   public boolean checkSuitMatch(Game game) {
     int tableSize = game.getTable().size();
-    int lastSuit;
-    int topSuit;
+    Suit lastSuit;
+    Suit topSuit;
 
     if (tableSize < 2) {
       return false;
@@ -180,8 +179,6 @@ public class CardGameService {
     System.out.println();
     System.out.println();
   }
-
-  // Displays each player's current hand
 
   // Declare a winner
   public Game declareWinner(Game game) {
