@@ -28,6 +28,70 @@ class CardGameServiceTest {
   CardGameService service;
 
   @Test
+  @Disabled("@NotNull does not work")
+  public void shouldNotPlayANullGame() {
+    service.play(null);
+  }
+
+  @Test
+  @Disabled("@Valid does not work")
+  public void shouldNotPlayADefaultGame() {
+    Game game = new Game();
+    service.play(game);
+  }
+
+  @Test
+  public void shouldPlayAGameWithTwoCardsSameSuit() {
+    Game game = new Game();
+    game.getPlayerOne().takeCard(new Card());
+    game.getPlayerTwo().takeCard(new Card());
+    assertEquals(0, game.getTable().size());
+    game = service.play(game);
+    assertEquals(2, game.getTable().size());
+    assertEquals(game.getPlayerTwo(), game.getWinner());
+  }
+
+  @Test
+  public void shouldPlayAGameWithFourCardsSameSuit() {
+    Game game = new Game();
+    game.getPlayerOne().takeCard(new Card(CLUBS, 1));
+    game.getPlayerTwo().takeCard(new Card(DIAMONDS, 2));
+    game.getPlayerOne().takeCard(new Card());
+    game.getPlayerTwo().takeCard(new Card());
+    assertEquals(0, game.getTable().size());
+    game = service.play(game);
+    assertEquals(4, game.getTable().size());
+    assertEquals(game.getPlayerTwo(), game.getWinner());
+  }
+
+  @Test
+  public void shouldPlayAGameWithFiveCardsSameSuit() {
+    Game game = new Game();
+    game.getPlayerOne().takeCard(new Card(CLUBS, 1));
+    game.getPlayerTwo().takeCard(new Card(DIAMONDS, 2));
+    game.getPlayerOne().takeCard(new Card(HEARTS, 3));
+    game.getPlayerTwo().takeCard(new Card());
+    game.getPlayerOne().takeCard(new Card());
+    assertEquals(0, game.getTable().size());
+    game = service.play(game);
+    assertEquals(5, game.getTable().size());
+    assertEquals(game.getPlayerOne(), game.getWinner());
+  }
+
+  @Test
+  public void shouldPlayAGameWithNoEquivalentSuit() {
+    Game game = new Game();
+    for (int i = 0; i < 30; i++) {
+      game.getPlayerOne().takeCard(new Card(CLUBS, 1));
+      game.getPlayerTwo().takeCard(new Card(DIAMONDS, 2));
+    }
+    assertEquals(0, game.getTable().size());
+    game = service.play(game);
+    assertEquals(52, game.getTable().size());
+    assertNull(game.getWinner());
+  }
+
+  @Test
   public void shouldStartGame() {
     Game game = service.startsANewGame();
     assertEquals(0, game.getTable().size());
@@ -58,7 +122,7 @@ class CardGameServiceTest {
   public void shouldCheckSuitMatchLowerTwo() {
     Game game = service.startsANewGame();
     assertEquals(0, game.getTable().size());
-    assertFalse(service.checkSuitFight(game));
+    assertFalse(service.suitsAreEquivalent(game));
   }
 
   @Test
@@ -67,7 +131,7 @@ class CardGameServiceTest {
     assertEquals(0, game.getTable().size());
     game.setTable(List.of(new Card(), new Card()));
     assertEquals(2, game.getTable().size());
-    assertTrue(service.checkSuitFight(game));
+    assertTrue(service.suitsAreEquivalent(game));
   }
 
   @Test
@@ -76,7 +140,7 @@ class CardGameServiceTest {
     assertEquals(0, game.getTable().size());
     game.setTable(List.of(new Card(DIAMONDS, 1), new Card(HEARTS, 1)));
     assertEquals(2, game.getTable().size());
-    assertFalse(service.checkSuitFight(game));
+    assertFalse(service.suitsAreEquivalent(game));
   }
 
   @Test
@@ -88,7 +152,8 @@ class CardGameServiceTest {
     assertEquals(0, game.getTable().size());
   }
 
-  @Test @Disabled
+  @Test
+  @Disabled
   public void shouldPlayRoundOver() {
     Game game = service.startsANewGame();
     Player playerOne = game.getPlayerOne();

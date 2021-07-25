@@ -3,63 +3,45 @@ package org.agoncal.application.cli;
  * Main class for running the simple card game.
  */
 
+import io.quarkus.runtime.Quarkus;
+import io.quarkus.runtime.QuarkusApplication;
+import io.quarkus.runtime.annotations.QuarkusMain;
 import org.agoncal.application.model.Card;
 import org.agoncal.application.model.Game;
 import org.agoncal.application.model.Player;
 import org.agoncal.application.service.CardGameService;
 
-public class PlayOneRoundMain {
+import javax.inject.Inject;
 
-  // Main method
+@QuarkusMain
+public class PlayOneRoundMain implements QuarkusApplication {
 
-  private CardGameService service = new CardGameService();
-
-  public static void main(String[] args) {
-    new PlayOneRoundMain().playOneRound();
+  public static void main(String... args) {
+    Quarkus.run(PlayOneRoundMain.class, args);
   }
 
-  // Play the simple card game
-  public void playOneRound() {
+  @Inject
+  CardGameService service;
 
-    // Starts a new game
-    Game game = service.startsANewGame();
-    System.out.println("#####################");
-    System.out.println("New game has started between " + game.getPlayerOne() + " and " + game.getPlayerTwo());
-    System.out.println(game.getCurrentPlayer() + " starts the game");
-    System.out.println();
-
-    // Plays one round
-    // Display each player's hand
-    displayHands(game);
+  @Override
+  public int run(String... args) throws Exception {
 
     // Play individual round
-    game = service.playsSeveralRounds(game);
+    Game game = service.play();
 
-    // Declares the winner of the game
-    declaresTheWinner(game); // Declare a winner
-
-    System.out.println("End of the game");
-    System.out.println("#####################");
-  }
-
-  // Declare a winner
-  private void declaresTheWinner(Game game) {
-    Player theWinner = game.getTheWinner();
-    if (theWinner == null) {
-      System.out.println("TIE! WOW IT'S SUPER RARE!");
-    } else {
-      System.out.println(theWinner.getName().toUpperCase() + " WINS WITH A TOTAL OF " + theWinner.getHandSize() + " CARDS!");
-    }
-    System.out.println();
-  }
-
-
-  private void displayHands(Game game) {
+    // Display each player's hand
     displayHand(game.getPlayerOne());
     displayHand(game.getPlayerTwo());
+
+    // Declares the winner of the game
+    displayTheWinner(game); // Declare a winner
+    displayTable(game);
+
+    Quarkus.asyncExit(0);
+    return 0;
   }
 
-  public void displayHand(Player player) {
+  private void displayHand(Player player) {
     System.out.println(player.getName() + "\'s hand (" + player.getHandSize() + "):");
 
     int grid = 0;
@@ -74,4 +56,22 @@ public class PlayOneRoundMain {
     System.out.println();
   }
 
+  private void displayTheWinner(Game game) {
+    if (game.getWinner() == null) {
+      System.out.println("TIE! WOW IT'S SUPER RARE!");
+    } else {
+      System.out.println(game.getWinner().getName().toUpperCase() + " WINS WITH A TOTAL OF " + game.getWinner().getHandSize() + " CARDS!");
+    }
+    System.out.println();
+  }
+
+  void displayTable(Game game) {
+    for (int i = 0; i < game.getTable().size(); i++) {
+      if (game.getTable().get(i) != null) {
+        System.out.print(game.getTable().get(i).getName() + " ");
+      }
+    }
+
+    System.out.println();
+  }
 }

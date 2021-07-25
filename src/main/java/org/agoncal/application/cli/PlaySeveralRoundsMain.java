@@ -54,11 +54,11 @@ public class PlaySeveralRoundsMain {
 
   // Declare a winner
   private void declaresTheWinner(Game game) {
-    Player theWinner = game.getTheWinner();
-    if (theWinner == null) {
+    game.calculateTheWinner();
+    if (game.getWinner() == null) {
       System.out.println("TIE! WOW IT'S SUPER RARE!");
     } else {
-      System.out.println(theWinner.getName().toUpperCase() + " WINS WITH A TOTAL OF " + theWinner.getHandSize() + " CARDS!");
+      System.out.println(game.getWinner().getName().toUpperCase() + " WINS WITH A TOTAL OF " + game.getWinner().getHandSize() + " CARDS!");
     }
     System.out.println();
   }

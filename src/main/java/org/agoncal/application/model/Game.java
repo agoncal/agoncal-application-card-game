@@ -12,6 +12,7 @@ public class Game {
   private Player playerOne;
   private Player playerTwo;
   private Player currentPlayer;
+  private Player winner;
   private List<Card> table = new ArrayList<>();
   private int roundsPlayed = 1;
   private boolean gameOver = false;
@@ -89,13 +90,21 @@ public class Game {
     this.gameOver = gameOver;
   }
 
-  public Player getTheWinner() {
+  public void calculateTheWinner() {
     if (playerOne.getHandSize() > playerTwo.getHandSize()) {
-      return playerOne;
+      winner = playerOne;
     } else if (playerTwo.getHandSize() > playerOne.getHandSize()) {
-      return playerTwo;
+      winner = playerTwo;
     } else {
-      return null;
+      winner = null;
     }
+  }
+
+  public Player getWinner() {
+    return winner;
+  }
+
+  public void setWinner(Player winner) {
+    this.winner = winner;
   }
 }

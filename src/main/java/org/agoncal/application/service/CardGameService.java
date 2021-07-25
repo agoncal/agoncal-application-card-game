@@ -1,11 +1,5 @@
-package org.agoncal.application.service;/*
- * Matt Levan
- * CSC 331, Dr. Amlan Chatterjee
- * Data Structures
- *
- * Project 3 -- Simple Card Game
- *
- * SimulateGame.java
+package org.agoncal.application.service;
+/*
  * Main class for running the simple card game.
  *
  * A simple card game with an option for two players.
@@ -48,15 +42,21 @@ import org.agoncal.application.model.Card;
 import org.agoncal.application.model.Deck;
 import org.agoncal.application.model.Game;
 import org.agoncal.application.model.Player;
-import org.agoncal.application.model.Suit;
+import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Random;
 
 import static org.agoncal.application.model.Game.NUMBER_OF_CARDS;
 
 @ApplicationScoped
 public class CardGameService {
+
+  @Inject
+  Logger logger;
 
   // ======================================
   // =              Methods               =
@@ -106,7 +106,7 @@ public class CardGameService {
       game.getTable().add(cardToPlay);
 
       // Check if there's a suit match
-      suitFight = checkSuitFight(game);
+      suitFight = suitsAreEquivalent(game);
 
       if (!suitFight)
         switchCurrentPlayer(game);
@@ -130,6 +130,43 @@ public class CardGameService {
     return game;
   }
 
+  public Game play() {
+    Game game = new Game();
+
+    // Deals 26 cards to each player in alternating order
+    Deck deck = new Deck();
+    for (int i = 0; i < (NUMBER_OF_CARDS / 2); i++) {
+      game.getPlayerOne().takeCard(deck.dealOneCard());
+      game.getPlayerTwo().takeCard(deck.dealOneCard());
+    }
+    return play(game);
+  }
+
+  public Game play(@NotNull @Valid Game game) {
+    boolean twoLastSuitsAreEquivalent = false;
+
+    while (!twoLastSuitsAreEquivalent && game.getTable().size() != NUMBER_OF_CARDS) {
+
+      // Current player places card on table
+      Card cardToPlay = game.getCurrentPlayer().playCard();
+      game.getTable().add(cardToPlay);
+      logger.debug(game.getCurrentPlayer().getName() + " plays a " + cardToPlay.getName());
+
+      // Checks if the suits are equivalent
+      twoLastSuitsAreEquivalent = suitsAreEquivalent(game);
+
+      // If the suits are equivalence, then the current player wins the fight
+      if (twoLastSuitsAreEquivalent) {
+        logger.info(game.getCurrentPlayer().getName() + " wins!");
+        game.setWinner(game.getCurrentPlayer());
+      } else {
+        switchCurrentPlayer(game);
+      }
+    }
+
+    return game;
+  }
+
   // ======================================
   // =          Private Methods           =
   // ======================================
@@ -144,26 +181,17 @@ public class CardGameService {
     return game;
   }
 
-  // Check for a suit match
-  boolean checkSuitFight(Game game) {
+  // Checks if the two last suits are equivalent
+  boolean suitsAreEquivalent(Game game) {
     int tableSize = game.getTable().size();
+
+    // You need at least two cards to fight
     if (tableSize < 2) {
-      // You need two cards to fight
       return false;
     }
 
-    Suit  lastSuit = game.getTable().get(tableSize - 1).getSuit();
-    Suit  topSuit = game.getTable().get(tableSize - 2).getSuit();
-
     // If the suits are equivalence, then the current player wins the fight
-    if (lastSuit == topSuit) {
-      System.out.println();
-      System.out.println(game.getCurrentPlayer().getName() + " wins the round!");
-      System.out.println();
-      return true;
-    }
-
-    return false;
+    return game.getTable().get(tableSize - 1).getSuit() == game.getTable().get(tableSize - 2).getSuit();
   }
 
   // Collect cards from table
