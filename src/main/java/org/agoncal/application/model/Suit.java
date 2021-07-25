@@ -6,20 +6,30 @@ public enum Suit {
   // =             Attributes             =
   // ======================================
 
-  CLUBS('\u2663'), DIAMONDS('\u2666'), HEARTS('\u2764'), SPADES('\u2660');
+  CLUBS('\u2663', 'C'), DIAMONDS('\u2666', 'D'), HEARTS('\u2764', 'H'), SPADES('\u2660', 'S');
 
-  private final char representation;
+  private final char ascii;
+  private final char code;
 
   // ======================================
   // =            Constructors            =
   // ======================================
 
-  Suit(char representation) {
-    this.representation = representation;
+  Suit(char ascii, char code) {
+    this.ascii = ascii;
+    this.code = code;
+  }
+
+  public char getCode() {
+    return code;
+  }
+
+  public char getAscii() {
+    return ascii;
   }
 
   @Override
   public String toString() {
-    return String.valueOf(representation);
+    return String.valueOf(ascii);
   }
 }

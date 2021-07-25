@@ -52,11 +52,14 @@ public class Card {
     else // For cards 2 through 10
       name = Integer.toString(value);
 
-    // Returns the card name with the suit symbol
-    return name + suit;
+    return name;
+  }
+
+  public String getURL() {
+    return "https://deckofcardsapi.com/static/img/" + getName() + suit.getCode() + ".png";
   }
 
   public String toString() {
-    return getName();
+    return getName() + suit.getAscii();
   }
 }

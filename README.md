@@ -14,3 +14,9 @@ one player gets all 52 cards, or for 10 rounds.
 
 Inspired from https://github.com/mattlevan/Simple_Card_Game
 Java Programming: "From the Ground Up" by Bravaco, Simonson
+
+## APIs
+
+http://deckofcardsapi.com
+http://deckofcardsapi.com/static/img/KH.png
+http://deckofcardsapi.com/static/img/8C.png
