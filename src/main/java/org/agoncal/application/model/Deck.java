@@ -4,8 +4,8 @@ package org.agoncal.application.model;
  */
 
 import javax.json.bind.annotation.JsonbProperty;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -22,8 +22,8 @@ public class Deck {
 
   @JsonbProperty("deck_id")
   private String id;
-  private List<Card> cards = new ArrayList<>();
-  private int next; // Holds position of next card to be dealt
+  private LinkedList<Card> cards = new LinkedList<>();
+  //private int next; // Holds position of next card to be dealt
 
   public static final int NUMBER_OF_CARDS = 52;
 
@@ -42,9 +42,7 @@ public class Deck {
 
   // Deals one card at a time
   public Card dealOneCard() {
-    Card c = cards.get(next);
-    next++;
-    return c;
+    return cards.removeFirst();
   }
 
   public String getId() {
@@ -52,7 +50,7 @@ public class Deck {
   }
 
   public int getRemaining() {
-    return NUMBER_OF_CARDS - next;
+    return cards.size();
   }
 
   // ======================================
@@ -81,9 +79,4 @@ public class Deck {
   List<Card> getCards() {
     return cards;
   }
-
-  int getNext() {
-    return next;
-  }
-
 }
