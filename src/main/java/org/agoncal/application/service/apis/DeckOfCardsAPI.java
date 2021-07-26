@@ -54,7 +54,7 @@ public interface DeckOfCardsAPI {
   @GET
   @Path("/{deckid}/draw/")
   @Produces(MediaType.APPLICATION_JSON)
-  DeckOfCards play(@PathParam("deckid") String deckid);
+  DeckOfCards dealOneCard(@PathParam("deckid") String deckid);
 
 
 }

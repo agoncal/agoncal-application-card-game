@@ -30,7 +30,7 @@ http://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1
 Play 2 cards (1 card each player)
 
 ```shell
-http://deckofcardsapi.com/api/deck/<<deck_id>>/draw/?count=2
+http://deckofcardsapi.com/api/deck/<<deck_id>>/draw/?count=1
 ```
 
 http://deckofcardsapi.com/static/img/KH.png
