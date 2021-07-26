@@ -14,11 +14,11 @@ class CardTest {
 
   @Test
   public void shouldCheckCardImage() {
-    assertEquals("https://deckofcardsapi.com/static/img/AC.png", new Card(CLUBS, 1).getURL());
-    assertEquals("https://deckofcardsapi.com/static/img/2H.png", new Card(HEARTS, 2).getURL());
-    assertEquals("https://deckofcardsapi.com/static/img/JD.png", new Card(DIAMONDS, 11).getURL());
-    assertEquals("https://deckofcardsapi.com/static/img/QD.png", new Card(DIAMONDS, 12).getURL());
-    assertEquals("https://deckofcardsapi.com/static/img/KS.png", new Card(SPADES, 13).getURL());
+    assertEquals("https://deckofcardsapi.com/static/img/AC.png", new Card(CLUBS, 1).getImage());
+    assertEquals("https://deckofcardsapi.com/static/img/2H.png", new Card(HEARTS, 2).getImage());
+    assertEquals("https://deckofcardsapi.com/static/img/JD.png", new Card(DIAMONDS, 11).getImage());
+    assertEquals("https://deckofcardsapi.com/static/img/QD.png", new Card(DIAMONDS, 12).getImage());
+    assertEquals("https://deckofcardsapi.com/static/img/KS.png", new Card(SPADES, 13).getImage());
   }
 
   @Test

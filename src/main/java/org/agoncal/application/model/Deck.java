@@ -23,7 +23,6 @@ public class Deck {
   @JsonbProperty("deck_id")
   private String id;
   private LinkedList<Card> cards = new LinkedList<>();
-  //private int next; // Holds position of next card to be dealt
 
   public static final int NUMBER_OF_CARDS = 52;
 

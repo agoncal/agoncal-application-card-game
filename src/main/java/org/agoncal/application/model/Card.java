@@ -59,7 +59,7 @@ public class Card {
     return getName() + suit.getCode();
   }
 
-  public String getURL() {
+  public String getImage() {
     return "https://deckofcardsapi.com/static/img/" + getCode() + ".png";
   }
 
