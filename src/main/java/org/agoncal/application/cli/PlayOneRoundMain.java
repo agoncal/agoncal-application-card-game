@@ -4,8 +4,6 @@ package org.agoncal.application.cli;
  */
 
 import io.quarkus.runtime.Quarkus;
-import io.quarkus.runtime.QuarkusApplication;
-import io.quarkus.runtime.annotations.QuarkusMain;
 import org.agoncal.application.model.Card;
 import org.agoncal.application.model.Game;
 import org.agoncal.application.model.Player;
@@ -13,17 +11,17 @@ import org.agoncal.application.service.CardGameService;
 
 import javax.inject.Inject;
 
-@QuarkusMain
-public class PlayOneRoundMain implements QuarkusApplication {
+//@QuarkusMain
+public class PlayOneRoundMain /*implements QuarkusApplication*/ {
 
   public static void main(String... args) {
-    Quarkus.run(PlayOneRoundMain.class, args);
+    //Quarkus.run(PlayOneRoundMain.class, args);
   }
 
   @Inject
   CardGameService service;
 
-  @Override
+  //@Override
   public int run(String... args) throws Exception {
 
     // Play individual round
