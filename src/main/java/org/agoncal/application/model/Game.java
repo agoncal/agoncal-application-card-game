@@ -13,6 +13,7 @@ public class Game {
   private Player playerTwo;
   private Player currentPlayer;
   private Player winner;
+  private Deck deck;
   private List<Card> table = new ArrayList<>();
   private int roundsPlayed = 1;
   private boolean gameOver = false;
@@ -30,6 +31,7 @@ public class Game {
   }
 
   public Game(String namePlayerOne, String namePlayerTwo) {
+    this.deck = new Deck();
     this.playerOne = new Player(namePlayerOne);
     this.playerTwo = new Player(namePlayerTwo);
     this.currentPlayer = playerOne;
@@ -105,5 +107,13 @@ public class Game {
 
   public void setWinner(Player winner) {
     this.winner = winner;
+  }
+
+  public Deck getDeck() {
+    return deck;
+  }
+
+  public void setDeck(Deck deck) {
+    this.deck = deck;
   }
 }

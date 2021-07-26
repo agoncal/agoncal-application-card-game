@@ -30,6 +30,6 @@ public class CardGamePage {
   @GET
   @Produces(MediaType.TEXT_HTML)
   public TemplateInstance get(@QueryParam("one") @DefaultValue(NAME_PLAYER_ONE) String namePlayerOne, @QueryParam("two") @DefaultValue(NAME_PLAYER_TWO) String namePlayerTwo) {
-    return Templates.play(service.play(namePlayerOne, namePlayerTwo));
+    return Templates.play(service.newGame(namePlayerOne, namePlayerTwo));
   }
 }

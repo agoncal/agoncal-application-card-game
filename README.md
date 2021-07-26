@@ -17,6 +17,27 @@ Java Programming: "From the Ground Up" by Bravaco, Simonson
 
 ## APIs
 
+### Deck of Cards
+
 http://deckofcardsapi.com
+
+Shuffle
+
+```shell
+http://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1
+```
+
+Play 2 cards (1 card each player)
+
+```shell
+http://deckofcardsapi.com/api/deck/<<deck_id>>/draw/?count=2
+```
+
 http://deckofcardsapi.com/static/img/KH.png
 http://deckofcardsapi.com/static/img/8C.png
+
+### DiceBear Avatars
+
+https://avatars.dicebear.com/
+https://avatars.dicebear.com/api/bottts/dummy.svg
+https://avatars.dicebear.com/api/bottts/dummy.svg?width=300

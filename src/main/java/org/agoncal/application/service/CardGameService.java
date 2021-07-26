@@ -42,6 +42,9 @@ import org.agoncal.application.model.Card;
 import org.agoncal.application.model.Deck;
 import org.agoncal.application.model.Game;
 import org.agoncal.application.model.Player;
+import org.agoncal.application.service.apis.DeckOfCards;
+import org.agoncal.application.service.apis.DeckOfCardsAPI;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -129,6 +132,21 @@ public class CardGameService {
 
     // Increment rounds played counter
     game.incrementRound();
+    return game;
+  }
+
+  @Inject
+  @RestClient
+  DeckOfCardsAPI proxy;
+
+  public Game newGame() {
+    return newGame(NAME_PLAYER_ONE, NAME_PLAYER_TWO);
+  }
+
+  public Game newGame(String namePlayerOne, String namePlayerTwo) {
+    Game game = new Game(namePlayerOne, namePlayerTwo);
+    DeckOfCards deckOfCards = proxy.newDeck();
+    game.getDeck().setId(deckOfCards.getDeckId());
     return game;
   }
 

@@ -21,7 +21,6 @@ public class PlayOneRoundMain /*implements QuarkusApplication*/ {
   @Inject
   CardGameService service;
 
-  //@Override
   public int run(String... args) throws Exception {
 
     // Play individual round
@@ -58,15 +57,14 @@ public class PlayOneRoundMain /*implements QuarkusApplication*/ {
     if (game.getWinner() == null) {
       System.out.println("TIE! WOW IT'S SUPER RARE!");
     } else {
-      System.out.println(game.getWinner().getName().toUpperCase() + " WINS WITH A TOTAL OF " + game.getWinner().getHandSize() + " CARDS!");
+      System.out.print("\n" + game.getWinner().getName().toUpperCase() + " WINS WITH A TOTAL OF " + game.getWinner().getHandSize() + " CARDS! ");
     }
-    System.out.println();
   }
 
   void displayTable(Game game) {
     for (int i = 0; i < game.getTable().size(); i++) {
       if (game.getTable().get(i) != null) {
-        System.out.print(game.getTable().get(i).getCode() + " ");
+        System.out.print(game.getTable().get(i) + " ");
       }
     }
 
