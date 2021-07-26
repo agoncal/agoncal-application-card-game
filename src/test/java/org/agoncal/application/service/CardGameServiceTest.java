@@ -47,8 +47,12 @@ class CardGameServiceTest {
     game.getPlayerOne().takeCard(new Card());
     game.getPlayerTwo().takeCard(new Card());
     assertEquals(0, game.getTable().size());
+    assertEquals(1, game.getPlayerOne().getCards().size());
+    assertEquals(1, game.getPlayerTwo().getCards().size());
     game = service.play(game);
     assertEquals(2, game.getTable().size());
+    assertEquals(0, game.getPlayerOne().getCards().size());
+    assertEquals(0, game.getPlayerTwo().getCards().size());
     assertEquals(game.getPlayerTwo(), game.getWinner());
   }
 
@@ -60,8 +64,12 @@ class CardGameServiceTest {
     game.getPlayerOne().takeCard(new Card());
     game.getPlayerTwo().takeCard(new Card());
     assertEquals(0, game.getTable().size());
+    assertEquals(2, game.getPlayerOne().getCards().size());
+    assertEquals(2, game.getPlayerTwo().getCards().size());
     game = service.play(game);
     assertEquals(4, game.getTable().size());
+    assertEquals(0, game.getPlayerOne().getCards().size());
+    assertEquals(0, game.getPlayerTwo().getCards().size());
     assertEquals(game.getPlayerTwo(), game.getWinner());
   }
 
@@ -74,8 +82,12 @@ class CardGameServiceTest {
     game.getPlayerTwo().takeCard(new Card());
     game.getPlayerOne().takeCard(new Card());
     assertEquals(0, game.getTable().size());
+    assertEquals(3, game.getPlayerOne().getCards().size());
+    assertEquals(2, game.getPlayerTwo().getCards().size());
     game = service.play(game);
     assertEquals(5, game.getTable().size());
+    assertEquals(0, game.getPlayerOne().getCards().size());
+    assertEquals(0, game.getPlayerTwo().getCards().size());
     assertEquals(game.getPlayerOne(), game.getWinner());
   }
 

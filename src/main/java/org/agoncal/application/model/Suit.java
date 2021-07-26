@@ -27,9 +27,4 @@ public enum Suit {
   public char getAscii() {
     return ascii;
   }
-
-  @Override
-  public String toString() {
-    return String.valueOf(ascii);
-  }
 }

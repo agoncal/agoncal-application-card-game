@@ -49,9 +49,4 @@ public class Player {
   public int getHandSize() {
     return cards.size();
   }
-
-  @Override
-  public String toString() {
-    return name;
-  }
 }
