@@ -51,6 +51,8 @@ import javax.validation.constraints.NotNull;
 import java.util.Random;
 
 import static org.agoncal.application.model.Deck.NUMBER_OF_CARDS;
+import static org.agoncal.application.model.Game.NAME_PLAYER_ONE;
+import static org.agoncal.application.model.Game.NAME_PLAYER_TWO;
 
 @ApplicationScoped
 public class CardGameService {
@@ -131,7 +133,11 @@ public class CardGameService {
   }
 
   public Game play() {
-    Game game = new Game();
+    return play(NAME_PLAYER_ONE, NAME_PLAYER_TWO);
+  }
+
+  public Game play(String namePlayerOne, String namePlayerTwo) {
+    Game game = new Game(namePlayerOne, namePlayerTwo);
 
     // Deals 26 cards to each player in alternating order
     Deck deck = new Deck();

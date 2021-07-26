@@ -18,20 +18,20 @@ public class Game {
   private boolean gameOver = false;
 
   public static final int MAX_ROUND = 10;
+  public static final String NAME_PLAYER_ONE = "Alice";
+  public static final String NAME_PLAYER_TWO = "Bob";
 
   // ======================================
   // =            Constructors            =
   // ======================================
 
   public Game() {
-    this.playerOne = new Player();
-    this.playerTwo = new Player("Alice");
-    this.currentPlayer = playerOne;
+    this(NAME_PLAYER_ONE, NAME_PLAYER_TWO);
   }
 
-  public Game(Player playerOne, Player playerTwo) {
-    this.playerOne = playerOne;
-    this.playerTwo = playerTwo;
+  public Game(String namePlayerOne, String namePlayerTwo) {
+    this.playerOne = new Player(namePlayerOne);
+    this.playerTwo = new Player(namePlayerTwo);
     this.currentPlayer = playerOne;
   }
 

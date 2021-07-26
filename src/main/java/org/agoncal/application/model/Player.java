@@ -18,10 +18,6 @@ public class Player {
   // =            Constructors            =
   // ======================================
 
-  public Player() {
-    this.name = "Bob";
-  }
-
   public Player(String name) {
     this.name = name;
   }

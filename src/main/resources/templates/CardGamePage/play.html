@@ -1,0 +1,15 @@
+{#include base.html}
+{#title}Fight Between {game.playerOne.name} and {game.playerTwo.name} {/title}
+{#body}
+<div class="container">
+  <div class="row">
+    <div class="col"><img src="https://avatars.dicebear.com/api/bottts/{game.playerOne.name}.svg?width=300"/></div>
+    <div class="col"><img src="https://avatars.dicebear.com/api/bottts/{game.playerTwo.name}.svg?width=300"/></div>
+    <div class="w-100"></div>
+    <div class="col">Column</div>
+    <div class="col">Column</div>
+  </div>
+</div>
+<a class="btn btn-primary" href="http://localhost:8080/page/artists" role="button">Back to Artists</a>
+{/body}
+{/include}
