@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
@@ -28,16 +30,15 @@ class CardGameServiceTest {
   CardGameService service;
 
   @Test
-  @Disabled("@NotNull does not work")
   public void shouldNotPlayANullGame() {
-    service.play(null);
+    assertThrows(ConstraintViolationException.class, () -> service.play(null));
   }
 
   @Test
   @Disabled("@Valid does not work")
   public void shouldNotPlayADefaultGame() {
     Game game = new Game();
-    service.play(game);
+    assertThrows(ConstraintViolationException.class, () -> service.play(game));
   }
 
   @Test

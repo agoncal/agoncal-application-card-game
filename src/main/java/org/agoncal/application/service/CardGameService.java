@@ -102,7 +102,7 @@ public class CardGameService {
     while (!suitFight) {
       // Current player places card on table
       cardToPlay = game.getCurrentPlayer().playCard();
-      System.out.println(String.format("%5s", game.getCurrentPlayer().getName()) + " plays a " + cardToPlay.getName() + "!");
+      System.out.println(String.format("%5s", game.getCurrentPlayer().getName()) + " plays a " + cardToPlay + "!");
       game.getTable().add(cardToPlay);
 
       // Check if there's a suit match
@@ -136,8 +136,11 @@ public class CardGameService {
     // Deals 26 cards to each player in alternating order
     Deck deck = new Deck();
     for (int i = 0; i < (NUMBER_OF_CARDS / 2); i++) {
-      game.getPlayerOne().takeCard(deck.dealOneCard());
-      game.getPlayerTwo().takeCard(deck.dealOneCard());
+      Card cardPlayerOne = deck.dealOneCard();
+      Card cardPlayerTwo = deck.dealOneCard();
+      game.getPlayerOne().takeCard(cardPlayerOne);
+      game.getPlayerTwo().takeCard(cardPlayerTwo);
+      logger.debug("Card player one (" + cardPlayerOne + ") - Card player two (" + cardPlayerTwo + ") - Remains " + deck.getRemaining() + " cards of deck " + deck.getId());
     }
     return play(game);
   }
@@ -150,7 +153,7 @@ public class CardGameService {
       // Current player places card on table
       Card cardToPlay = game.getCurrentPlayer().playCard();
       game.getTable().add(cardToPlay);
-      logger.debug(game.getCurrentPlayer().getName() + " plays a " + cardToPlay.getName());
+      logger.debug(game.getCurrentPlayer().getName() + " plays a " + cardToPlay);
 
       // Checks if the suits are equivalent
       twoLastSuitsAreEquivalent = suitsAreEquivalent(game);
@@ -210,7 +213,7 @@ public class CardGameService {
   void displayTable(Game game) {
     for (int i = 0; i < game.getTable().size(); i++) {
       if (game.getTable().get(i) != null) {
-        System.out.print(game.getTable().get(i).getName() + " ");
+        System.out.print(game.getTable().get(i).getCode() + " ");
       }
     }
 

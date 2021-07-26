@@ -68,7 +68,7 @@ public class PlayOneRoundMain implements QuarkusApplication {
   void displayTable(Game game) {
     for (int i = 0; i < game.getTable().size(); i++) {
       if (game.getTable().get(i) != null) {
-        System.out.print(game.getTable().get(i).getName() + " ");
+        System.out.print(game.getTable().get(i).getCode() + " ");
       }
     }
 

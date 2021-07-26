@@ -55,8 +55,12 @@ public class Card {
     return name;
   }
 
+  public String getCode() {
+    return getName() + suit.getCode();
+  }
+
   public String getURL() {
-    return "https://deckofcardsapi.com/static/img/" + getName() + suit.getCode() + ".png";
+    return "https://deckofcardsapi.com/static/img/" + getCode() + ".png";
   }
 
   public String toString() {
