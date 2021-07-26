@@ -3,7 +3,7 @@ package org.agoncal.application.model;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
-import static org.agoncal.application.model.Game.NUMBER_OF_CARDS;
+import static org.agoncal.application.model.Deck.NUMBER_OF_CARDS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;

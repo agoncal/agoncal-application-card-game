@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import static org.agoncal.application.model.Game.NUMBER_OF_CARDS;
 import static org.agoncal.application.model.Suit.CLUBS;
 import static org.agoncal.application.model.Suit.DIAMONDS;
 import static org.agoncal.application.model.Suit.HEARTS;
@@ -25,6 +24,8 @@ public class Deck {
   private String id;
   private List<Card> cards = new ArrayList<>();
   private int next; // Holds position of next card to be dealt
+
+  public static final int NUMBER_OF_CARDS = 52;
 
   // ======================================
   // =            Constructors            =

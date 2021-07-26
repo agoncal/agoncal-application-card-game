@@ -50,7 +50,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Random;
 
-import static org.agoncal.application.model.Game.NUMBER_OF_CARDS;
+import static org.agoncal.application.model.Deck.NUMBER_OF_CARDS;
 
 @ApplicationScoped
 public class CardGameService {

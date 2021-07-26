@@ -18,7 +18,6 @@ public class Game {
   private boolean gameOver = false;
 
   public static final int MAX_ROUND = 10;
-  public static final int NUMBER_OF_CARDS = 52;
 
   // ======================================
   // =            Constructors            =
