@@ -1,0 +1,21 @@
+{#include base.html}
+{#title}Fight Between {game.playerOne.name} and {game.playerTwo.name} deck {game.deck.id}{/title}
+{#body}
+<div class="container">
+  <div class="row">
+    <div class="col"><img src="https://avatars.dicebear.com/api/bottts/{game.playerOne.name}.svg?width=300"/></div>
+    <div class="col"><img src="https://avatars.dicebear.com/api/bottts/{game.playerTwo.name}.svg?width=300"/></div>
+    <div class="w-100"></div>
+    <div class="col">{game.table.size}</div>
+    <div class="col">
+
+      {#for card in game.table}
+        <img src="{card.image}" height="100px"/>
+      {/for}
+
+    </div>
+  </div>
+</div>
+<a class="btn btn-primary" href="http://localhost:8080/play/next" role="button">Next Card</a>
+{/body}
+{/include}
