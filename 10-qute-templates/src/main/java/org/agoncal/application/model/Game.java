@@ -15,8 +15,9 @@ public class Game {
   private Player playerTwo;
   private Player currentPlayer;
   private Player winner;
-  private Deck deck;
+  private Deck deck = new Deck();
   private List<Card> table = new ArrayList<>();
+  private boolean over;
 
   public static final String NAME_PLAYER_ONE = "Alice";
   public static final String NAME_PLAYER_TWO = "Bob";
@@ -30,7 +31,6 @@ public class Game {
   }
 
   public Game(String namePlayerOne, String namePlayerTwo) {
-    this.deck = new Deck();
     this.playerOne = new Player(namePlayerOne);
     this.playerTwo = new Player(namePlayerTwo);
     this.currentPlayer = playerOne;
@@ -38,6 +38,59 @@ public class Game {
 
   // ======================================
   // =              Methods               =
+  // ======================================
+
+  public void currentPlayerPlaysOneCard(Card card) {
+    this.currentPlayer.playCard(card);
+    this.table.add(card);
+    switchCurrentPlayer();
+  }
+
+  public boolean twoLastSuitsAreEquivalent() {
+    int tableSize = table.size();
+
+    // You need at least two cards to fight
+    if (tableSize < 2) {
+      return false;
+    }
+
+    // If the suits are equivalence, then the current player wins the fight and the game is over
+    if (table.get(tableSize - 1).getSuit() == table.get(tableSize - 2).getSuit()) {
+      this.winner = currentPlayer;
+      this.over = true;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public void switchCurrentPlayer() {
+    if (currentPlayer == playerOne)
+      currentPlayer = playerTwo;
+    else if (currentPlayer == playerTwo)
+      currentPlayer = playerOne;
+  }
+
+  public boolean isOver() {
+    if (table.size() == NUMBER_OF_CARDS) {
+      over = true;
+    }
+
+    return over;
+  }
+
+  public void calculateTheWinner() {
+    if (playerOne.getHandSize() > playerTwo.getHandSize()) {
+      winner = playerOne;
+    } else if (playerTwo.getHandSize() > playerOne.getHandSize()) {
+      winner = playerTwo;
+    } else {
+      winner = null;
+    }
+  }
+
+  // ======================================
+  // =        Getters and Setters         =
   // ======================================
 
   public Player getPlayerOne() {
@@ -64,54 +117,13 @@ public class Game {
     this.currentPlayer = currentPlayer;
   }
 
-  public List<Card> getTable() {
-    return table;
-  }
-
-  public void setTable(List<Card> table) {
-    this.table = table;
-  }
-
-  public void playOneCard(Card card) {
-    this.currentPlayer.playCard(card);
-    this.table.add(card);
-  }
-
-  public void switchPlayers() {
-    if (currentPlayer == playerOne)
-      currentPlayer = playerTwo;
-    else if (currentPlayer == playerTwo)
-      currentPlayer = playerOne;
-  }
-
-  public boolean isGameOver() {
-    if ((playerOne.getHandSize() == NUMBER_OF_CARDS) || (playerTwo.getHandSize() == NUMBER_OF_CARDS)) {
-      return true;
-    }
-
-    if (table.size() == NUMBER_OF_CARDS) {
-      return true;
-    }
-
-    return false;
-  }
-
-  public void calculateTheWinner() {
-    if (playerOne.getHandSize() > playerTwo.getHandSize()) {
-      winner = playerOne;
-    } else if (playerTwo.getHandSize() > playerOne.getHandSize()) {
-      winner = playerTwo;
-    } else {
-      winner = null;
-    }
-  }
-
   public Player getWinner() {
     return winner;
   }
 
-  public void setWinner(Player winner) {
-    this.winner = winner;
+  public void currentPlayerWon() {
+    this.winner = currentPlayer;
+    this.over = true;
   }
 
   public Deck getDeck() {
@@ -120,5 +132,13 @@ public class Game {
 
   public void setDeck(Deck deck) {
     this.deck = deck;
+  }
+
+  public List<Card> getTable() {
+    return table;
+  }
+
+  public void setTable(List<Card> table) {
+    this.table = table;
   }
 }

@@ -1,6 +1,6 @@
-package org.agoncal.application.service.apis;
+package org.agoncal.application.service;
 
-import org.agoncal.application.service.LoggingFilter;
+import org.agoncal.application.model.Deck;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 @RegisterRestClient//(configKey = "deckofcards-api")
 @Path("/api/deck")
 @RegisterProvider(LoggingFilter.class)
-public interface DeckOfCardsAPI {
+public interface DeckService {
 
   /**
    * https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1
@@ -30,7 +30,7 @@ public interface DeckOfCardsAPI {
   @GET
   @Path("/new/shuffle/")
   @Produces(MediaType.APPLICATION_JSON)
-  DeckOfCards newDeck(@QueryParam("deck_count") @DefaultValue("1") int deckCount);
+  Deck getNewShuffledDeck();
 
   /**
    * https://deckofcardsapi.com/api/deck/heveznyy02y3/draw/?count=1
@@ -68,7 +68,5 @@ public interface DeckOfCardsAPI {
   @GET
   @Path("/{deckid}/draw/")
   @Produces(MediaType.APPLICATION_JSON)
-  DeckOfCards dealOneCard(@PathParam("deckid") String deckid, @QueryParam("count") @DefaultValue("1") int count);
-
-
+  Deck dealOneCard(@PathParam("deckid") String deckid, @QueryParam("count") @DefaultValue("1") int count);
 }

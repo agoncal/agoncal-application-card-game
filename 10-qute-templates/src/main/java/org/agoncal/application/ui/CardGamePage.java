@@ -3,6 +3,7 @@ package org.agoncal.application.ui;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import org.agoncal.application.model.Game;
+import org.agoncal.application.service.CardGameService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -21,7 +22,7 @@ import static org.agoncal.application.model.Game.NAME_PLAYER_TWO;
 public class CardGamePage {
 
   @Inject
-  CardGamePageService service;
+  CardGameService service;
 
   Game game;
 
@@ -33,7 +34,7 @@ public class CardGamePage {
   @GET
   @Produces(MediaType.TEXT_HTML)
   public TemplateInstance playANewGame(@QueryParam("one") @DefaultValue(NAME_PLAYER_ONE) String namePlayerOne, @QueryParam("two") @DefaultValue(NAME_PLAYER_TWO) String namePlayerTwo) {
-    game = service.newGame(game, namePlayerOne, namePlayerTwo);
+    game = service.startANewGame(namePlayerOne, namePlayerTwo);
     return Templates.play(game);
   }
 
@@ -41,6 +42,6 @@ public class CardGamePage {
   @GET
   @Produces(MediaType.TEXT_HTML)
   public TemplateInstance nextCard(@QueryParam("one") @DefaultValue(NAME_PLAYER_ONE) String namePlayerOne, @QueryParam("two") @DefaultValue(NAME_PLAYER_TWO) String namePlayerTwo, @QueryParam("deck_id") String deckId) {
-    return Templates.play(service.playCard(game));
+    return Templates.play(service.playOneCard(game));
   }
 }

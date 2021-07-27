@@ -23,6 +23,12 @@ public class Deck {
   // =            Constructors            =
   // ======================================
 
+  public Deck() {
+  }
+
+  public Deck(LinkedList<Card> cards) {
+    this.cards = cards;
+  }
 
   // ======================================
   // =              Methods               =
@@ -32,6 +38,10 @@ public class Deck {
   public Card dealOneCard() {
     return cards.removeFirst();
   }
+
+  // ======================================
+  // =        Getters and Setters         =
+  // ======================================
 
   public String getId() {
     return id;

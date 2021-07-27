@@ -40,9 +40,6 @@ package org.agoncal.application.service;
 
 import org.agoncal.application.model.Card;
 import org.agoncal.application.model.Game;
-import org.agoncal.application.model.Player;
-import org.agoncal.application.service.apis.DeckOfCards;
-import org.agoncal.application.service.apis.DeckOfCardsAPI;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 
@@ -63,84 +60,63 @@ public class CardGameService {
 
   @Inject
   @RestClient
-  DeckOfCardsAPI proxy;
+  DeckService deckProxy;
 
   // ======================================
   // =              Methods               =
   // ======================================
 
-  public Game startsANewGame() {
-    return startsANewGame(NAME_PLAYER_ONE, NAME_PLAYER_TWO);
-  }
-
-  public Game startsANewGame(String namePlayerOne, String namePlayerTwo) {
+  public Game playAGame() {
     Game game = new Game();
-    DeckOfCards deckOfCards = proxy.newDeck(1);
-    game.getDeck().setId(deckOfCards.getDeckId());
+    game.setDeck(deckProxy.getNewShuffledDeck());
 
-    // Choose which players goes first
-    Random random = new Random();
-    int n = random.nextInt(2);
+    while (!game.isOver()) {
+      Card card = deckProxy.dealOneCard(game.getDeck().getId(), 1).getCards().get(0);
+      game.currentPlayerPlaysOneCard(card);
 
-    if (n == 1) {
-      // Make playerTwo the new playerOne
-      Player temp = game.getPlayerOne();
-      game.setPlayerOne(game.getPlayerTwo());
-      game.setPlayerTwo(temp);
-    }
-
-    return game;
-  }
-
-  public Game play(@NotNull @Valid Game game) {
-    boolean twoLastSuitsAreEquivalent = false;
-
-    while (!twoLastSuitsAreEquivalent && !game.isGameOver()) {
-
-      // Current player places card on table
-      Card cardToPlay = proxy.dealOneCard(game.getDeck().getId(), 1).getCards().get(0);
-      game.playOneCard(cardToPlay);
-      logger.debug(game.getCurrentPlayer().getName() + " plays a " + cardToPlay + "table has now " + game.getTable().size() + "cards");
-
-      // Checks if the suits are equivalent
-      twoLastSuitsAreEquivalent = suitsAreEquivalent(game);
-
-      // If the suits are equivalence, then the current player wins the fight
-      if (twoLastSuitsAreEquivalent) {
-        logger.info(game.getCurrentPlayer().getName() + " wins!");
-        game.setWinner(game.getCurrentPlayer());
+      if (game.twoLastSuitsAreEquivalent()) {
+        game.currentPlayerWon();
       } else {
-        switchCurrentPlayer(game);
+        game.switchCurrentPlayer();
       }
     }
 
     return game;
   }
 
-  // ======================================
-  // =          Private Methods           =
-  // ======================================
+  public Game startANewGame() {
+    return startANewGame(NAME_PLAYER_ONE, NAME_PLAYER_TWO);
+  }
 
-  // Switch current player
-  Game switchCurrentPlayer(Game game) {
-    if (game.getCurrentPlayer() == game.getPlayerOne())
-      game.setCurrentPlayer(game.getPlayerTwo());
-    else if (game.getCurrentPlayer() == game.getPlayerTwo())
-      game.setCurrentPlayer(game.getPlayerOne());
+  public Game startANewGame(String namePlayerOne, String namePlayerTwo) {
+    Game game = new Game();
+    game.setDeck(deckProxy.getNewShuffledDeck());
+
+    // Choose which players goes first
+    Random random = new Random();
+
+    if (random.nextBoolean()) {
+      game.switchCurrentPlayer();
+    }
 
     return game;
   }
 
-  // Checks if the two last suits are equivalent
-  boolean suitsAreEquivalent(Game game) {
-    int tableSize = game.getTable().size();
+  public Game playOneCard(@NotNull @Valid Game game) {
 
-    // You need at least two cards to fight
-    if (tableSize < 2) {
-      return false;
-    }
+    // Current player places card on table
+    Card card = deckProxy.dealOneCard(game.getDeck().getId(), 1).getCards().get(0);
+    game.currentPlayerPlaysOneCard(card);
+    logger.debug(game.getCurrentPlayer().getName() + " plays a " + card + " table has now " + game.getTable().size() + "cards");
 
     // If the suits are equivalence, then the current player wins the fight
-    return game.getTable().get(tableSize - 1).getSuit() == game.getTable().get(tableSize - 2).getSuit();
+    if (game.twoLastSuitsAreEquivalent()) {
+      logger.info(game.getCurrentPlayer().getName() + " wins!");
+      game.currentPlayerWon();
+    } else {
+      game.switchCurrentPlayer();
+    }
+
+    return game;
   }
 }

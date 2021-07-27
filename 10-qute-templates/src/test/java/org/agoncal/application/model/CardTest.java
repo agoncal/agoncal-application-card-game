@@ -14,28 +14,34 @@ class CardTest {
 
   @Test
   public void shouldCheckCardCode() {
-    assertEquals("ACEC", new Card(1, CLUBS).getCode());
-    assertEquals("2H", new Card(2, HEARTS).getCode());
-    assertEquals("JACKD", new Card(11, DIAMONDS).getCode());
-    assertEquals("QUEEND", new Card(12, DIAMONDS).getCode());
-    assertEquals("KINGS", new Card(13, SPADES).getCode());
+    Card card = new Card(1, CLUBS);
+    assertEquals("AC", card.getCode());
+    assertEquals("ACE", card.getValue());
+    assertEquals("A♣", card.toString());
+    assertEquals(CLUBS, card.getSuit());
 
-    assertEquals("ACEC", new Card("ACE", CLUBS).getCode());
-    assertEquals("2H", new Card("2", HEARTS).getCode());
-    assertEquals("JACKD", new Card("JACK", DIAMONDS).getCode());
-    assertEquals("QUEEND", new Card("QUEEN", DIAMONDS).getCode());
-    assertEquals("KINGS", new Card("KING", SPADES).getCode());
+    card = new Card(2, HEARTS);
+    assertEquals("2H", card.getCode());
+    assertEquals("2", card.getValue());
+    assertEquals("2❤", card.toString());
+    assertEquals(HEARTS, card.getSuit());
 
-    assertEquals(1, new Card("ACE", CLUBS).getValue());
-    assertEquals(2, new Card("2", HEARTS).getValue());
-    assertEquals(11, new Card("JACK", DIAMONDS).getValue());
-    assertEquals(12, new Card("QUEEN", DIAMONDS).getValue());
-    assertEquals(13, new Card("KING", SPADES).getValue());
+    card = new Card(11, DIAMONDS);
+    assertEquals("JD", card.getCode());
+    assertEquals("JACK", card.getValue());
+    assertEquals("J♦", card.toString());
+    assertEquals(DIAMONDS, card.getSuit());
 
-    assertEquals(CLUBS, new Card("ACE", CLUBS).getSuit());
-    assertEquals(HEARTS, new Card("2", HEARTS).getSuit());
-    assertEquals(DIAMONDS, new Card("JACK", DIAMONDS).getSuit());
-    assertEquals(DIAMONDS, new Card("QUEEN", DIAMONDS).getSuit());
-    assertEquals(SPADES, new Card("KING", SPADES).getSuit());
+    card = new Card(12, DIAMONDS);
+    assertEquals("QD", card.getCode());
+    assertEquals("QUEEN", card.getValue());
+    assertEquals("Q♦", card.toString());
+    assertEquals(DIAMONDS, card.getSuit());
+
+    card = new Card(13, SPADES);
+    assertEquals("KS", card.getCode());
+    assertEquals("KING", card.getValue());
+    assertEquals("K♠", card.toString());
+    assertEquals(SPADES, card.getSuit());
   }
 }
