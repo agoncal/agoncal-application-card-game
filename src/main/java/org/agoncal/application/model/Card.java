@@ -4,6 +4,9 @@ package org.agoncal.application.model;
  * A card class.
  */
 
+import static org.agoncal.application.model.Suit.CLUBS;
+import static org.agoncal.application.model.Suit.DIAMONDS;
+import static org.agoncal.application.model.Suit.HEARTS;
 import static org.agoncal.application.model.Suit.SPADES;
 
 public class Card {
@@ -12,8 +15,10 @@ public class Card {
   // =             Attributes             =
   // ======================================
 
-  private final Suit suit; // 1 Clubs, 2 Diamonds, 3 Hearts, 4 Spades
-  private final int value; // 1 Ace... 11 J, 12 Q, 13 K
+  private Suit suit; // 1 Clubs, 2 Diamonds, 3 Hearts, 4 Spades
+  private int value; // 1 Ace... 11 Jack, 12 Queen, 13 King
+  private String code; // QC, JD, 2H
+  private String image; // URL of the PNG
 
   // ======================================
   // =            Constructors            =
@@ -29,6 +34,11 @@ public class Card {
     this.value = value;
   }
 
+  public Card(String suit, String name) {
+    setSuit(suit);
+    setValue(name);
+  }
+
   // ======================================
   // =              Methods               =
   // ======================================
@@ -42,17 +52,48 @@ public class Card {
 
     // Convert int value to name of face value
     if (this.value == 1)
-      name = "A";
+      name = "ACE";
     else if (value == 11)
-      name = "J";
+      name = "JACK";
     else if (value == 12)
-      name = "Q";
+      name = "QUEEN";
     else if (value == 13)
-      name = "K";
+      name = "KING";
     else // For cards 2 through 10
       name = Integer.toString(value);
 
     return name;
+  }
+
+  public void setValue(String name) {
+    // Convert int value to name of face value
+    if (name.equals("ACE"))
+      this.value = 1;
+    else if (name.equals("JACK"))
+      this.value = 11;
+    else if (name.equals("QUEEN"))
+      this.value = 12;
+    else if (name.equals("KING"))
+      this.value = 13;
+    else // For cards 2 through 10
+      this.value = Integer.parseInt(name);
+  }
+
+  public void setSuit(String name) {
+    // Convert int value to name of face value
+    if (name.equals("CLUBS"))
+      this.suit = CLUBS;
+    else if (name.equals("DIAMONDS"))
+      this.suit = DIAMONDS;
+    else if (name.equals("HEARTS"))
+      this.suit = HEARTS;
+    else if (name.equals("SPADES"))
+      this.suit = SPADES;
+
+  }
+
+  public int getValue() {
+    return value;
   }
 
   public String getCode() {
@@ -65,5 +106,9 @@ public class Card {
 
   public String toString() {
     return getName() + suit.getAscii();
+  }
+
+  public void setImage(String image) {
+    this.image = image;
   }
 }

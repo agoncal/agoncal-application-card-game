@@ -4,10 +4,12 @@ import org.agoncal.application.service.LoggingFilter;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 @RegisterRestClient//(configKey = "deckofcards-api")
@@ -16,7 +18,7 @@ import javax.ws.rs.core.MediaType;
 public interface DeckOfCardsAPI {
 
   /**
-   * https://deckofcardsapi.com/api/deck/new/shuffle/
+   * https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1
    *
    * {
    * "success": true,
@@ -28,10 +30,10 @@ public interface DeckOfCardsAPI {
   @GET
   @Path("/new/shuffle/")
   @Produces(MediaType.APPLICATION_JSON)
-  DeckOfCards newDeck();
+  DeckOfCards newDeck(@QueryParam("deck_count") @DefaultValue("1") int deckCount);
 
   /**
-   * https://deckofcardsapi.com/api/deck/heveznyy02y3/draw/
+   * https://deckofcardsapi.com/api/deck/heveznyy02y3/draw/?count=1
    * {
    *   "success": true,
    *   "deck_id": "heveznyy02y3",
@@ -54,7 +56,7 @@ public interface DeckOfCardsAPI {
   @GET
   @Path("/{deckid}/draw/")
   @Produces(MediaType.APPLICATION_JSON)
-  DeckOfCards dealOneCard(@PathParam("deckid") String deckid);
+  DeckOfCards dealOneCard(@PathParam("deckid") String deckid, @QueryParam("count") @DefaultValue("1") int count);
 
 
 }

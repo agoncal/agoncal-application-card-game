@@ -145,7 +145,7 @@ public class CardGameService {
 
   public Game newGame(String namePlayerOne, String namePlayerTwo) {
     Game game = new Game(namePlayerOne, namePlayerTwo);
-    DeckOfCards deckOfCards = proxy.newDeck();
+    DeckOfCards deckOfCards = proxy.newDeck(1);
     game.getDeck().setId(deckOfCards.getDeckId());
     return game;
   }

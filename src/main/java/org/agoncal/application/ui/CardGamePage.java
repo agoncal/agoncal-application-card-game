@@ -33,9 +33,11 @@ public class CardGamePage {
   @GET
   @Produces(MediaType.TEXT_HTML)
   public TemplateInstance playANewGame(@QueryParam("one") @DefaultValue(NAME_PLAYER_ONE) String namePlayerOne, @QueryParam("two") @DefaultValue(NAME_PLAYER_TWO) String namePlayerTwo) {
-    return Templates.play(service.newGame(game, namePlayerOne, namePlayerTwo));
+    game = service.newGame(game, namePlayerOne, namePlayerTwo);
+    return Templates.play(game);
   }
 
+  @Path("/next")
   @GET
   @Produces(MediaType.TEXT_HTML)
   public TemplateInstance nextCard(@QueryParam("one") @DefaultValue(NAME_PLAYER_ONE) String namePlayerOne, @QueryParam("two") @DefaultValue(NAME_PLAYER_TWO) String namePlayerTwo, @QueryParam("deck_id") String deckId) {

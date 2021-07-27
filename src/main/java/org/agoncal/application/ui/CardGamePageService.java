@@ -40,7 +40,6 @@ package org.agoncal.application.ui;
 
 import org.agoncal.application.model.Card;
 import org.agoncal.application.model.Game;
-import org.agoncal.application.model.Suit;
 import org.agoncal.application.service.apis.DeckOfCards;
 import org.agoncal.application.service.apis.DeckOfCardsAPI;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -65,17 +64,17 @@ public class CardGamePageService {
 
   public Game newGame(Game game, String namePlayerOne, String namePlayerTwo) {
     game = new Game(namePlayerOne, namePlayerTwo);
-    DeckOfCards deckOfCards = proxy.newDeck();
+    DeckOfCards deckOfCards = proxy.newDeck(1);
     game.getDeck().setId(deckOfCards.getDeckId());
     return game;
   }
 
   public Game playCard(Game game) {
 
-    DeckOfCards deckOfCards = proxy.dealOneCard(game.getDeck().getId());
+    DeckOfCards deckOfCards = proxy.dealOneCard(game.getDeck().getId(), 1);
 
       // Current player places card on table
-      Card cardToPlay = new Card(Suit.DIAMONDS, 1);
+      Card cardToPlay = new Card(deckOfCards.getCards().get(0).getSuit().toString(), deckOfCards.getCards().get(0).getName());
       game.getTable().add(cardToPlay);
       logger.debug(game.getCurrentPlayer().getName() + " plays a " + cardToPlay);
 
