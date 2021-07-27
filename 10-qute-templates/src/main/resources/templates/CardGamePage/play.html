@@ -1,21 +1,53 @@
-{#include base.html}
-{#title}Fight Between {game.playerOne.name} and {game.playerTwo.name} deck {game.deck.id}{/title}
-{#body}
-<div class="container">
-  <div class="row">
-    <div class="col"><img src="https://avatars.dicebear.com/api/bottts/{game.playerOne.name}.svg?width=300"/></div>
-    <div class="col"><img src="https://avatars.dicebear.com/api/bottts/{game.playerTwo.name}.svg?width=300"/></div>
-    <div class="w-100"></div>
-    <div class="col">{game.table.size}</div>
-    <div class="col">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <style>
+    main > .container {
+      padding: 60px 15px 0;
+    }
+  </style>
+  <title>Bott Fight</title>
+</head>
+<body>
 
-      {#for card in game.table}
+<header>
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Bott Fight</a>
+    </div>
+  </nav>
+</header>
+
+<main class="flex-shrink-0">
+  <div class="container">
+    <div class="row">
+      <div class="col">{game.playerOne.name}</div>
+      <div class="col">{game.playerTwo.name}</div>
+      <div class="w-100"></div>
+      <div class="col"><img src="https://avatars.dicebear.com/api/bottts/{game.playerOne.name}.svg?width=300"/></div>
+      <div class="col"><img src="https://avatars.dicebear.com/api/bottts/{game.playerTwo.name}.svg?width=300"/></div>
+      <div class="w-100"></div>
+      <div class="col">{game.table.size}</div>
+      <div class="col">
+
+        {#for card in game.table}
         <img src="{card.image}" height="100px"/>
-      {/for}
+        {/for}
+        <a class="btn btn-primary" href="http://localhost:8080/play/next" role="button">Play a Card</a>
 
+      </div>
     </div>
   </div>
-</div>
-<a class="btn btn-primary" href="http://localhost:8080/play/next" role="button">Next Card</a>
-{/body}
-{/include}
+</main>
+
+<footer class="footer mt-auto py-3 bg-light">
+  <div class="container">
+    <span class="text-muted">Place sticky footer content here.</span>
+  </div>
+</footer>
+</body>
+</html>
