@@ -25,20 +25,27 @@
 <main class="flex-shrink-0">
   <div class="container">
     <div class="row">
-      <div class="col">{game.playerOne.name}</div>
-      <div class="col">{game.playerTwo.name}</div>
+      <div class="col text-center"><h1>{game.playerOne.name}</h1></div>
+      <div class="col text-center"><h1>{game.playerTwo.name}</h1></div>
       <div class="w-100"></div>
-      <div class="col"><img src="https://avatars.dicebear.com/api/bottts/{game.playerOne.name}.svg?width=300"/></div>
-      <div class="col"><img src="https://avatars.dicebear.com/api/bottts/{game.playerTwo.name}.svg?width=300"/></div>
+      <div class="col text-center"><img src="https://avatars.dicebear.com/api/bottts/{game.playerOne.name}.svg?width=300"/></div>
+      <div class="col text-center"><img src="https://avatars.dicebear.com/api/bottts/{game.playerTwo.name}.svg?width=300"/></div>
       <div class="w-100"></div>
-      <div class="col">{game.table.size}</div>
-      <div class="col">
-
+    </div>
+    <div class="row">
+      <div class="col text-center">
+        {#if game.isOver}
+        <a class="btn btn-primary" href="http://localhost:8080/play" role="button">Play a new Game</a>
+        {#else}
+        <a class="btn btn-primary" href="http://localhost:8080/play/next" role="button">Play a Card</a>
+        {/if}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col" style="background-color: green">
         {#for card in game.table}
         <img src="{card.image}" height="100px"/>
         {/for}
-        <a class="btn btn-primary" href="http://localhost:8080/play/next" role="button">Play a Card</a>
-
       </div>
     </div>
   </div>
@@ -46,7 +53,10 @@
 
 <footer class="footer mt-auto py-3 bg-light">
   <div class="container">
-    <span class="text-muted">Place sticky footer content here.</span>
+    <p class="text-muted">Table: {game.table.size}</p>
+    <p class="text-muted">Player one: {game.playerOne.name}</p>
+    <p class="text-muted">Player two: {game.playerTwo.name}</p>
+    <p class="text-muted">Winner: {game.winner.name}</p>
   </div>
 </footer>
 </body>
