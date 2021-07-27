@@ -3,6 +3,8 @@ package org.agoncal.application.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.agoncal.application.model.Deck.NUMBER_OF_CARDS;
+
 public class Game {
 
   // ======================================
@@ -15,10 +17,7 @@ public class Game {
   private Player winner;
   private Deck deck;
   private List<Card> table = new ArrayList<>();
-  private int roundsPlayed = 1;
-  private boolean gameOver = false;
 
-  public static final int MAX_ROUND = 10;
   public static final String NAME_PLAYER_ONE = "Alice";
   public static final String NAME_PLAYER_TWO = "Bob";
 
@@ -73,22 +72,28 @@ public class Game {
     this.table = table;
   }
 
-  public int getRoundsPlayed() {
-    return roundsPlayed;
+  public void playOneCard(Card card) {
+    this.currentPlayer.playCard(card);
+    this.table.add(card);
   }
 
-  public void incrementRound() {
-    this.roundsPlayed++;
+  public void switchPlayers() {
+    if (currentPlayer == playerOne)
+      currentPlayer = playerTwo;
+    else if (currentPlayer == playerTwo)
+      currentPlayer = playerOne;
   }
 
   public boolean isGameOver() {
-    if (roundsPlayed > MAX_ROUND)
-      gameOver = true;
-    return gameOver;
-  }
+    if ((playerOne.getHandSize() == NUMBER_OF_CARDS) || (playerTwo.getHandSize() == NUMBER_OF_CARDS)) {
+      return true;
+    }
 
-  public void setGameOver(boolean gameOver) {
-    this.gameOver = gameOver;
+    if (table.size() == NUMBER_OF_CARDS) {
+      return true;
+    }
+
+    return false;
   }
 
   public void calculateTheWinner() {

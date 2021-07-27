@@ -13,38 +13,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CardTest {
 
   @Test
-  public void shouldCheckCardImage() {
-    assertEquals("https://deckofcardsapi.com/static/img/AC.png", new Card(CLUBS, 1).getImage());
-    assertEquals("https://deckofcardsapi.com/static/img/2H.png", new Card(HEARTS, 2).getImage());
-    assertEquals("https://deckofcardsapi.com/static/img/JD.png", new Card(DIAMONDS, 11).getImage());
-    assertEquals("https://deckofcardsapi.com/static/img/QD.png", new Card(DIAMONDS, 12).getImage());
-    assertEquals("https://deckofcardsapi.com/static/img/KS.png", new Card(SPADES, 13).getImage());
-  }
-
-  @Test
   public void shouldCheckCardCode() {
-    assertEquals("ACEC", new Card(CLUBS, 1).getCode());
-    assertEquals("2H", new Card(HEARTS, 2).getCode());
-    assertEquals("JACKD", new Card(DIAMONDS, 11).getCode());
-    assertEquals("QUEEND", new Card(DIAMONDS, 12).getCode());
-    assertEquals("KINGS", new Card(SPADES, 13).getCode());
+    assertEquals("ACEC", new Card(1, CLUBS).getCode());
+    assertEquals("2H", new Card(2, HEARTS).getCode());
+    assertEquals("JACKD", new Card(11, DIAMONDS).getCode());
+    assertEquals("QUEEND", new Card(12, DIAMONDS).getCode());
+    assertEquals("KINGS", new Card(13, SPADES).getCode());
 
-    assertEquals("ACEC", new Card("CLUBS", "ACE").getCode());
-    assertEquals("2H", new Card("HEARTS", "2").getCode());
-    assertEquals("JACKD", new Card("DIAMONDS", "JACK").getCode());
-    assertEquals("QUEEND", new Card("DIAMONDS", "QUEEN").getCode());
-    assertEquals("KINGS", new Card("SPADES", "KING").getCode());
+    assertEquals("ACEC", new Card("ACE", CLUBS).getCode());
+    assertEquals("2H", new Card("2", HEARTS).getCode());
+    assertEquals("JACKD", new Card("JACK", DIAMONDS).getCode());
+    assertEquals("QUEEND", new Card("QUEEN", DIAMONDS).getCode());
+    assertEquals("KINGS", new Card("KING", SPADES).getCode());
 
-    assertEquals(1, new Card("CLUBS", "ACE").getValue());
-    assertEquals(2, new Card("HEARTS", "2").getValue());
-    assertEquals(11, new Card("DIAMONDS", "JACK").getValue());
-    assertEquals(12, new Card("DIAMONDS", "QUEEN").getValue());
-    assertEquals(13, new Card("SPADES", "KING").getValue());
+    assertEquals(1, new Card("ACE", CLUBS).getValue());
+    assertEquals(2, new Card("2", HEARTS).getValue());
+    assertEquals(11, new Card("JACK", DIAMONDS).getValue());
+    assertEquals(12, new Card("QUEEN", DIAMONDS).getValue());
+    assertEquals(13, new Card("KING", SPADES).getValue());
 
-    assertEquals(CLUBS, new Card("CLUBS", "ACE").getSuit());
-    assertEquals(HEARTS, new Card("HEARTS", "2").getSuit());
-    assertEquals(DIAMONDS, new Card("DIAMONDS", "JACK").getSuit());
-    assertEquals(DIAMONDS, new Card("DIAMONDS", "QUEEN").getSuit());
-    assertEquals(SPADES, new Card("SPADES", "KING").getSuit());
+    assertEquals(CLUBS, new Card("ACE", CLUBS).getSuit());
+    assertEquals(HEARTS, new Card("2", HEARTS).getSuit());
+    assertEquals(DIAMONDS, new Card("JACK", DIAMONDS).getSuit());
+    assertEquals(DIAMONDS, new Card("QUEEN", DIAMONDS).getSuit());
+    assertEquals(SPADES, new Card("KING", SPADES).getSuit());
   }
 }

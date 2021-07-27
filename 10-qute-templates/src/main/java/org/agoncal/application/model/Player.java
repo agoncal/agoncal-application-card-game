@@ -12,7 +12,7 @@ public class Player {
   // ======================================
 
   private String name;
-  private LinkedList<Card> cards = new LinkedList<>(); // Cards in hand
+  private LinkedList<Card> hand = new LinkedList<>(); // Cards in hand
 
   // ======================================
   // =            Constructors            =
@@ -26,23 +26,19 @@ public class Player {
   // =              Methods               =
   // ======================================
 
-  public Card playCard() {
-    return cards.removeFirst();
-  }
-
-  public void takeCard(Card card) {
-    cards.add(card);
+  public void playCard(Card card) {
+    hand.add(card);
   }
 
   public String getName() {
     return name;
   }
 
-  public LinkedList<Card> getCards() {
-    return cards;
+  public LinkedList<Card> getHand() {
+    return hand;
   }
 
   public int getHandSize() {
-    return cards.size();
+    return hand.size();
   }
 }

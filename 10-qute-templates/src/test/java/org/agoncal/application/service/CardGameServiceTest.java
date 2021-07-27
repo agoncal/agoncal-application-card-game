@@ -47,47 +47,47 @@ class CardGameServiceTest {
     game.getPlayerOne().takeCard(new Card());
     game.getPlayerTwo().takeCard(new Card());
     assertEquals(0, game.getTable().size());
-    assertEquals(1, game.getPlayerOne().getCards().size());
-    assertEquals(1, game.getPlayerTwo().getCards().size());
+    assertEquals(1, game.getPlayerOne().getHand().size());
+    assertEquals(1, game.getPlayerTwo().getHand().size());
     game = service.play(game);
     assertEquals(2, game.getTable().size());
-    assertEquals(0, game.getPlayerOne().getCards().size());
-    assertEquals(0, game.getPlayerTwo().getCards().size());
+    assertEquals(0, game.getPlayerOne().getHand().size());
+    assertEquals(0, game.getPlayerTwo().getHand().size());
     assertEquals(game.getPlayerTwo(), game.getWinner());
   }
 
   @Test
   public void shouldPlayAGameWithFourCardsSameSuit() {
     Game game = new Game();
-    game.getPlayerOne().takeCard(new Card(CLUBS, 1));
-    game.getPlayerTwo().takeCard(new Card(DIAMONDS, 2));
+    game.getPlayerOne().takeCard(new Card(1, CLUBS));
+    game.getPlayerTwo().takeCard(new Card(2, DIAMONDS));
     game.getPlayerOne().takeCard(new Card());
     game.getPlayerTwo().takeCard(new Card());
     assertEquals(0, game.getTable().size());
-    assertEquals(2, game.getPlayerOne().getCards().size());
-    assertEquals(2, game.getPlayerTwo().getCards().size());
+    assertEquals(2, game.getPlayerOne().getHand().size());
+    assertEquals(2, game.getPlayerTwo().getHand().size());
     game = service.play(game);
     assertEquals(4, game.getTable().size());
-    assertEquals(0, game.getPlayerOne().getCards().size());
-    assertEquals(0, game.getPlayerTwo().getCards().size());
+    assertEquals(0, game.getPlayerOne().getHand().size());
+    assertEquals(0, game.getPlayerTwo().getHand().size());
     assertEquals(game.getPlayerTwo(), game.getWinner());
   }
 
   @Test
   public void shouldPlayAGameWithFiveCardsSameSuit() {
     Game game = new Game();
-    game.getPlayerOne().takeCard(new Card(CLUBS, 1));
-    game.getPlayerTwo().takeCard(new Card(DIAMONDS, 2));
-    game.getPlayerOne().takeCard(new Card(HEARTS, 3));
+    game.getPlayerOne().takeCard(new Card(1, CLUBS));
+    game.getPlayerTwo().takeCard(new Card(2, DIAMONDS));
+    game.getPlayerOne().takeCard(new Card(3, HEARTS));
     game.getPlayerTwo().takeCard(new Card());
     game.getPlayerOne().takeCard(new Card());
     assertEquals(0, game.getTable().size());
-    assertEquals(3, game.getPlayerOne().getCards().size());
-    assertEquals(2, game.getPlayerTwo().getCards().size());
+    assertEquals(3, game.getPlayerOne().getHand().size());
+    assertEquals(2, game.getPlayerTwo().getHand().size());
     game = service.play(game);
     assertEquals(5, game.getTable().size());
-    assertEquals(0, game.getPlayerOne().getCards().size());
-    assertEquals(0, game.getPlayerTwo().getCards().size());
+    assertEquals(0, game.getPlayerOne().getHand().size());
+    assertEquals(0, game.getPlayerTwo().getHand().size());
     assertEquals(game.getPlayerOne(), game.getWinner());
   }
 
@@ -95,8 +95,8 @@ class CardGameServiceTest {
   public void shouldPlayAGameWithNoEquivalentSuit() {
     Game game = new Game();
     for (int i = 0; i < 30; i++) {
-      game.getPlayerOne().takeCard(new Card(CLUBS, 1));
-      game.getPlayerTwo().takeCard(new Card(DIAMONDS, 2));
+      game.getPlayerOne().takeCard(new Card(1, CLUBS));
+      game.getPlayerTwo().takeCard(new Card(2, DIAMONDS));
     }
     assertEquals(0, game.getTable().size());
     game = service.play(game);
@@ -151,7 +151,7 @@ class CardGameServiceTest {
   public void shouldCheckSuitMatchDifferentSuit() {
     Game game = service.startsANewGame();
     assertEquals(0, game.getTable().size());
-    game.setTable(List.of(new Card(DIAMONDS, 1), new Card(HEARTS, 1)));
+    game.setTable(List.of(new Card(1, DIAMONDS), new Card(1, HEARTS)));
     assertEquals(2, game.getTable().size());
     assertFalse(service.suitsAreEquivalent(game));
   }
@@ -159,7 +159,7 @@ class CardGameServiceTest {
   @Test
   public void shouldCollectCards() {
     Game game = service.startsANewGame();
-    game.setTable(new ArrayList<>(List.of(new Card(DIAMONDS, 1), new Card(CLUBS, 1))));
+    game.setTable(new ArrayList<>(List.of(new Card(1, DIAMONDS), new Card(1, CLUBS))));
     assertEquals(2, game.getTable().size());
     game = service.currentPlayerCollectTableCards(game);
     assertEquals(0, game.getTable().size());

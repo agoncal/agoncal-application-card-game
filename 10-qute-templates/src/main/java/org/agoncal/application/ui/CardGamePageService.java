@@ -74,7 +74,8 @@ public class CardGamePageService {
     DeckOfCards deckOfCards = proxy.dealOneCard(game.getDeck().getId(), 1);
 
       // Current player places card on table
-      Card cardToPlay = new Card(deckOfCards.getCards().get(0).getSuit().toString(), deckOfCards.getCards().get(0).getName());
+//      Card cardToPlay = new Card(deckOfCards.getCards().get(0).getSuit().toString(), deckOfCards.getCards().get(0).getName());
+      Card cardToPlay = new Card();
       game.getTable().add(cardToPlay);
       logger.debug(game.getCurrentPlayer().getName() + " plays a " + cardToPlay);
 

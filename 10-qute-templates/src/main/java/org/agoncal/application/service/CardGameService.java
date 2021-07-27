@@ -39,7 +39,6 @@ package org.agoncal.application.service;
  */
 
 import org.agoncal.application.model.Card;
-import org.agoncal.application.model.Deck;
 import org.agoncal.application.model.Game;
 import org.agoncal.application.model.Player;
 import org.agoncal.application.service.apis.DeckOfCards;
@@ -53,7 +52,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Random;
 
-import static org.agoncal.application.model.Deck.NUMBER_OF_CARDS;
 import static org.agoncal.application.model.Game.NAME_PLAYER_ONE;
 import static org.agoncal.application.model.Game.NAME_PLAYER_TWO;
 
@@ -63,19 +61,22 @@ public class CardGameService {
   @Inject
   Logger logger;
 
+  @Inject
+  @RestClient
+  DeckOfCardsAPI proxy;
+
   // ======================================
   // =              Methods               =
   // ======================================
 
   public Game startsANewGame() {
-    Game game = new Game();
+    return startsANewGame(NAME_PLAYER_ONE, NAME_PLAYER_TWO);
+  }
 
-    // Deals 26 cards to each player in alternating order
-    Deck deck = new Deck();
-    for (int i = 0; i < (NUMBER_OF_CARDS / 2); i++) {
-      game.getPlayerOne().takeCard(deck.dealOneCard());
-      game.getPlayerTwo().takeCard(deck.dealOneCard());
-    }
+  public Game startsANewGame(String namePlayerOne, String namePlayerTwo) {
+    Game game = new Game();
+    DeckOfCards deckOfCards = proxy.newDeck(1);
+    game.getDeck().setId(deckOfCards.getDeckId());
 
     // Choose which players goes first
     Random random = new Random();
@@ -91,93 +92,15 @@ public class CardGameService {
     return game;
   }
 
-  // Play an individual round
-  // Play an individual round
-  public Game playsSeveralRounds(Game game) {
-    boolean suitFight = false; // Flag for notifying a suit fight
-    Card cardToPlay;
-
-    // If one player reaches 52 cards, then it's the end of the game, the player won
-    if ((game.getPlayerOne().getHandSize() == NUMBER_OF_CARDS) || (game.getPlayerTwo().getHandSize() == NUMBER_OF_CARDS)) {
-      game.setGameOver(true);
-      return game;
-    }
-
-    System.out.println("--- Cards on the table");
-    while (!suitFight) {
-      // Current player places card on table
-      cardToPlay = game.getCurrentPlayer().playCard();
-      System.out.println(String.format("%5s", game.getCurrentPlayer().getName()) + " plays a " + cardToPlay + "!");
-      game.getTable().add(cardToPlay);
-
-      // Check if there's a suit match
-      suitFight = suitsAreEquivalent(game);
-
-      if (!suitFight)
-        switchCurrentPlayer(game);
-    }
-
-    // Print a message
-    System.out.print(game.getCurrentPlayer().getName() + " takes the table (" + game.getTable().size() + "): ");
-    displayTable(game);
-
-    game = currentPlayerCollectTableCards(game);
-    System.out.println();
-
-    // Sleep for a second before beginning a new round
-    try {
-      Thread.sleep(500);
-    } catch (InterruptedException e) {
-    }
-
-    // Increment rounds played counter
-    game.incrementRound();
-    return game;
-  }
-
-  @Inject
-  @RestClient
-  DeckOfCardsAPI proxy;
-
-  public Game newGame() {
-    return newGame(NAME_PLAYER_ONE, NAME_PLAYER_TWO);
-  }
-
-  public Game newGame(String namePlayerOne, String namePlayerTwo) {
-    Game game = new Game(namePlayerOne, namePlayerTwo);
-    DeckOfCards deckOfCards = proxy.newDeck(1);
-    game.getDeck().setId(deckOfCards.getDeckId());
-    return game;
-  }
-
-  public Game play() {
-    return play(NAME_PLAYER_ONE, NAME_PLAYER_TWO);
-  }
-
-  public Game play(String namePlayerOne, String namePlayerTwo) {
-    Game game = new Game(namePlayerOne, namePlayerTwo);
-
-    // Deals 26 cards to each player in alternating order
-    Deck deck = new Deck();
-    for (int i = 0; i < (NUMBER_OF_CARDS / 2); i++) {
-      Card cardPlayerOne = deck.dealOneCard();
-      Card cardPlayerTwo = deck.dealOneCard();
-      game.getPlayerOne().takeCard(cardPlayerOne);
-      game.getPlayerTwo().takeCard(cardPlayerTwo);
-      logger.debug("Card player one (" + cardPlayerOne + ") - Card player two (" + cardPlayerTwo + ") - Remains " + deck.getRemaining() + " cards of deck " + deck.getId());
-    }
-    return play(game);
-  }
-
   public Game play(@NotNull @Valid Game game) {
     boolean twoLastSuitsAreEquivalent = false;
 
-    while (!twoLastSuitsAreEquivalent && game.getTable().size() != NUMBER_OF_CARDS) {
+    while (!twoLastSuitsAreEquivalent && !game.isGameOver()) {
 
       // Current player places card on table
-      Card cardToPlay = game.getCurrentPlayer().playCard();
-      game.getTable().add(cardToPlay);
-      logger.debug(game.getCurrentPlayer().getName() + " plays a " + cardToPlay);
+      Card cardToPlay = proxy.dealOneCard(game.getDeck().getId(), 1).getCards().get(0);
+      game.playOneCard(cardToPlay);
+      logger.debug(game.getCurrentPlayer().getName() + " plays a " + cardToPlay + "table has now " + game.getTable().size() + "cards");
 
       // Checks if the suits are equivalent
       twoLastSuitsAreEquivalent = suitsAreEquivalent(game);
@@ -219,28 +142,5 @@ public class CardGameService {
 
     // If the suits are equivalence, then the current player wins the fight
     return game.getTable().get(tableSize - 1).getSuit() == game.getTable().get(tableSize - 2).getSuit();
-  }
-
-  // Collect cards from table
-  Game currentPlayerCollectTableCards(Game game) {
-    // Current player takes each card from the table and adds to hand
-    for (int i = 0; i < game.getTable().size(); i++) {
-      Card cardToTake = game.getTable().get(i);
-      game.getCurrentPlayer().takeCard(cardToTake);
-    }
-
-    game.getTable().clear();
-    return game;
-  }
-
-  // Displays all the cards currently on the table
-  void displayTable(Game game) {
-    for (int i = 0; i < game.getTable().size(); i++) {
-      if (game.getTable().get(i) != null) {
-        System.out.print(game.getTable().get(i).getCode() + " ");
-      }
-    }
-
-    System.out.println();
   }
 }
