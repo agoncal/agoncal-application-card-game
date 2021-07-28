@@ -1,12 +1,13 @@
 package org.agoncal.application.model;
 
+import com.oblac.nomen.Casing;
+import com.oblac.nomen.Nomen;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import static org.agoncal.application.model.Deck.NUMBER_OF_CARDS;
-import static org.agoncal.application.model.Player.RANDOM_PLAYER_NAME_ONE;
-import static org.agoncal.application.model.Player.RANDOM_PLAYER_NAME_TWO;
 
 public class Game {
 
@@ -30,15 +31,11 @@ public class Game {
   // =              Methods               =
   // ======================================
 
-  public void startANewGame() {
-    startANewGame(RANDOM_PLAYER_NAME_ONE, RANDOM_PLAYER_NAME_TWO);
-  }
-
-  public void startANewGame(String namePlayerOne, String namePlayerTwo) {
+  public void initialize(String namePlayerOne, String namePlayerTwo) {
 
     // Set the player names
-    this.playerOne = namePlayerOne == null ? new Player(RANDOM_PLAYER_NAME_ONE) : new Player(namePlayerOne);
-    this.playerTwo = namePlayerTwo == null ? new Player(RANDOM_PLAYER_NAME_TWO) : new Player(namePlayerTwo);
+    this.playerOne = namePlayerOne == null ? new Player(Nomen.est().superhero().withCasing(Casing.CAPITALIZE).get()) : new Player(namePlayerOne);
+    this.playerTwo = namePlayerTwo == null ? new Player(Nomen.est().superhero().withCasing(Casing.CAPITALIZE).get()) : new Player(namePlayerTwo);
     currentPlayer = playerOne;
 
     // Choose which players goes first

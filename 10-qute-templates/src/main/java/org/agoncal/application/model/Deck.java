@@ -26,6 +26,10 @@ public class Deck {
   public Deck() {
   }
 
+  public Deck(String id) {
+    this.id = id;
+  }
+
   public Deck(LinkedList<Card> cards) {
     this.cards = cards;
   }

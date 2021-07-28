@@ -40,8 +40,6 @@ package org.agoncal.application.service;
 
 import org.agoncal.application.model.Card;
 import org.agoncal.application.model.Game;
-import org.agoncal.application.model.Player;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -54,39 +52,24 @@ public class CardGameService {
   Logger logger;
 
   @Inject
-  @RestClient
-  DeckService deckProxy;
+  DeckService deckService;
 
   // ======================================
   // =              Methods               =
   // ======================================
 
-  public Game playAGame() {
-    Game game = new Game();
-    game.setDeck(deckProxy.getNewShuffledDeck());
-
-    while (!game.isOver()) {
-      Card card = deckProxy.dealOneCard(game.getDeck().getId(), 1).getCards().get(0);
-      game.currentPlayerPlaysOneCard(card);
-
-      if (game.twoLastSuitsAreEquivalent()) {
-        game.currentPlayerWon();
-      } else {
-        game.switchCurrentPlayer();
-      }
-    }
-
-    return game;
-  }
-
   public Game startANewGame() {
-    return startANewGame(Player.RANDOM_PLAYER_NAME_ONE, Player.RANDOM_PLAYER_NAME_TWO);
+    return startANewGame(null, null);
   }
 
   public Game startANewGame(String namePlayerOne, String namePlayerTwo) {
     Game game = new Game();
-    game.startANewGame(namePlayerOne, namePlayerTwo);
-    game.setDeck(deckProxy.getNewShuffledDeck());
+
+    // Initializes the card game
+    game.initialize(namePlayerOne, namePlayerTwo);
+
+    // Sets a deck of cards
+    game.setDeck(deckService.newShuffledDeck());
 
     return game;
   }
@@ -94,7 +77,7 @@ public class CardGameService {
   public Game playOneCard(Game game) {
 
     // Current player places card on table
-    Card card = deckProxy.dealOneCard(game.getDeck().getId(), 1).getCards().get(0);
+    Card card = deckService.dealOneCard(game.getDeck().getId());
     game.currentPlayerPlaysOneCard(card);
     logger.debug(game.getCurrentPlayer().getName() + " plays a " + card + " table has now " + game.getTable().size() + "cards");
 

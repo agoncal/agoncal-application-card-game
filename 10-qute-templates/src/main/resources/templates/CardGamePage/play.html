@@ -44,14 +44,16 @@
     <div class="row">
       <div class="col" style="background-color: green">
         {#for card in game.table}
-        <img src="{card.image}" height="100px"/>
+          {#if card.image}
+            <img src="{card.image}" height="100px"/>
+          {#else}
+            {card}
+          {/if}
         {/for}
       </div>
     </div>
   </div>
 </main>
-config:property('app.verbose') : {config:property('app.verbose')}
-config:['app.verbose'] : {config:['app.verbose']}
 
 {#if config:property('app.verbose') is 'true'}
 <footer class="footer mt-auto py-3 bg-light">

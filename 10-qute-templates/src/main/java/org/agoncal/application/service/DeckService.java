@@ -1,72 +1,71 @@
 package org.agoncal.application.service;
 
+import com.oblac.nomen.Nomen;
+import org.agoncal.application.model.Card;
 import org.agoncal.application.model.Deck;
-import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
-import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
-@RegisterRestClient(configKey = "app.deck-of-cards-api")
-@Path("/api/deck")
-@RegisterProvider(LoggingFilter.class)
-public interface DeckService {
+import static org.agoncal.application.model.Suit.CLUBS;
+import static org.agoncal.application.model.Suit.DIAMONDS;
+import static org.agoncal.application.model.Suit.HEARTS;
+import static org.agoncal.application.model.Suit.SPADES;
 
-  /**
-   * https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1
-   * <p>
-   * {
-   * "success": true,
-   * "deck_id": "r0jvo8i4t3pn",
-   * "remaining": 52,
-   * "shuffled": true
-   * }
-   */
-  @GET
-  @Path("/new/shuffle/")
-  @Produces(MediaType.APPLICATION_JSON)
-  Deck getNewShuffledDeck();
+@ApplicationScoped
+public class DeckService {
 
-  /**
-   * https://deckofcardsapi.com/api/deck/heveznyy02y3/draw/?count=1
-   * <pre>
-   * {
-   *   "success": true,
-   *   "deck_id": "wd8ttfw18vze",
-   *   "cards": [
-   *     {
-   *       "code": "JH",
-   *       "image": "https://deckofcardsapi.com/static/img/JH.png",
-   *       "images": {
-   *         "svg": "https://deckofcardsapi.com/static/img/JH.svg",
-   *         "png": "https://deckofcardsapi.com/static/img/JH.png"
-   *       },
-   *       "value": "JACK",
-   *       "suit": "HEARTS"
-   *     },
-   *     {
-   *       "code": "8S",
-   *       "image": "https://deckofcardsapi.com/static/img/8S.png",
-   *       "images": {
-   *         "svg": "https://deckofcardsapi.com/static/img/8S.svg",
-   *         "png": "https://deckofcardsapi.com/static/img/8S.png"
-   *       },
-   *       "value": "8",
-   *       "suit": "SPADES"
-   *       }
-   *   ],
-   *   "remaining": 0
-   * }
-   * </pre>
-   */
+  @Inject
+  @RestClient
+  DeckOfCards deckOfCardsProxy;
 
-  @GET
-  @Path("/{deckid}/draw/")
-  @Produces(MediaType.APPLICATION_JSON)
-  Deck dealOneCard(@PathParam("deckid") String deckid, @QueryParam("count") @DefaultValue("1") int count);
+  Map<String, Deck> decks = new HashMap<>();
+
+  @Fallback(fallbackMethod = "fallbackNewShuffledDeck")
+  public Deck newShuffledDeck() {
+    return deckOfCardsProxy.newShuffledDeck();
+  }
+
+  @Fallback(fallbackMethod = "fallbackDealOneCard")
+  public Card dealOneCard(String deckid) {
+    return deckOfCardsProxy.dealOneCard(deckid, 1).getCards().get(0);
+  }
+
+  public Deck fallbackNewShuffledDeck() {
+    String deckId = Base64.getEncoder().encodeToString(Nomen.est().noun().get().getBytes());
+    Deck deck = new Deck(deckId);
+    deck.setCards(getSuffledCards());
+    decks.put(deckId, deck);
+
+    return deck;
+  }
+
+  public Card fallbackDealOneCard(String deckid) {
+    if (!decks.containsKey(deckid)) {
+      Deck deck = new Deck(deckid);
+      deck.setCards(getSuffledCards());
+      decks.put(deckid, deck);
+    }
+
+    return decks.get(deckid).dealOneCard();
+  }
+
+  private LinkedList<Card> getSuffledCards() {
+    LinkedList<Card> cards = new LinkedList<>();
+    for (int rank = 0; rank <= 12; rank++) {
+      cards.add(new Card(rank, CLUBS));
+      cards.add(new Card(rank, DIAMONDS));
+      cards.add(new Card(rank, HEARTS));
+      cards.add(new Card(rank, SPADES));
+    }
+    Collections.shuffle(cards);
+    return cards;
+  }
 }

@@ -15,10 +15,10 @@ import static org.agoncal.application.model.Suit.SPADES;
 
 @Mock
 @RestClient
-public class MockDeckService implements DeckService {
+public class MockDeckService implements DeckOfCards {
 
   @Override
-  public Deck getNewShuffledDeck() {
+  public Deck newShuffledDeck() {
     LinkedList<Card> cards = new LinkedList<>();
     for (int rank = 0; rank <= 12; rank++) {
       cards.add(new Card(rank, CLUBS));
