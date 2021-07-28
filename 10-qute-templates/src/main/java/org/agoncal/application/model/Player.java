@@ -3,6 +3,9 @@ package org.agoncal.application.model;
  * Player class.
  */
 
+import com.oblac.nomen.Casing;
+import com.oblac.nomen.Nomen;
+
 import java.util.LinkedList;
 
 public class Player {
@@ -13,6 +16,10 @@ public class Player {
 
   private String name;
   private LinkedList<Card> hand = new LinkedList<>(); // Cards in hand
+
+  public static final String RANDOM_PLAYER_NAME_ONE = Nomen.est().superhero().withCasing(Casing.CAPITALIZE).get();
+  public static final String RANDOM_PLAYER_NAME_TWO = Nomen.est().superhero().withCasing(Casing.CAPITALIZE).get();
+
 
   // ======================================
   // =            Constructors            =

@@ -3,7 +3,6 @@ package org.agoncal.application.model;
  * A deck of cards.
  */
 
-import javax.json.bind.annotation.JsonbProperty;
 import java.util.LinkedList;
 
 public class Deck {
@@ -12,7 +11,6 @@ public class Deck {
   // =             Attributes             =
   // ======================================
 
-  @JsonbProperty("deck_id")
   private String id;
   private int remaining;
   private LinkedList<Card> cards = new LinkedList<>();
@@ -24,6 +22,10 @@ public class Deck {
   // ======================================
 
   public Deck() {
+  }
+
+  public Deck(String id) {
+    this.id = id;
   }
 
   public Deck(LinkedList<Card> cards) {

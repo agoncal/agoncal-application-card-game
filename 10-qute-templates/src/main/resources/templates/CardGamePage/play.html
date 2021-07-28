@@ -35,7 +35,7 @@
     <div class="row">
       <div class="col text-center">
         {#if game.isOver}
-        <a class="btn btn-primary" href="http://localhost:8080/play" role="button">Play a new Game</a>
+        <a class="btn btn-primary" href="http://localhost:8080/play" role="button">Start a new Game</a>
         {#else}
         <a class="btn btn-primary" href="http://localhost:8080/play/next" role="button">Play a Card</a>
         {/if}
@@ -50,14 +50,29 @@
     </div>
   </div>
 </main>
+config:property('app.verbose') : {config:property('app.verbose')}
+config:['app.verbose'] : {config:['app.verbose']}
 
+{#if config:property('app.verbose') is 'true'}
 <footer class="footer mt-auto py-3 bg-light">
   <div class="container">
     <p class="text-muted">Table: {game.table.size}</p>
-    <p class="text-muted">Player one: {game.playerOne.name}</p>
-    <p class="text-muted">Player two: {game.playerTwo.name}</p>
-    <p class="text-muted">Winner: {game.winner.name}</p>
+    <p class="text-muted">Player one: {game.playerOne.name}
+      {#for card in game.playerOne.hand}
+        {card}
+      {/for}
+    </p>
+    <p class="text-muted">Player two: {game.playerTwo.name}
+      {#for card in game.playerTwo.hand}
+        {card}
+      {/for}
+    </p>
+    {#if game.isOver}
+      <p class="text-muted">Winner: {game.winner.name ?: 'That is super rare, no winner'}</p>
+    {/if}
   </div>
 </footer>
+{/if}
+
 </body>
 </html>

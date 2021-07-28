@@ -40,17 +40,12 @@ package org.agoncal.application.service;
 
 import org.agoncal.application.model.Card;
 import org.agoncal.application.model.Game;
+import org.agoncal.application.model.Player;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.Random;
-
-import static org.agoncal.application.model.Game.NAME_PLAYER_ONE;
-import static org.agoncal.application.model.Game.NAME_PLAYER_TWO;
 
 @ApplicationScoped
 public class CardGameService {
@@ -85,24 +80,18 @@ public class CardGameService {
   }
 
   public Game startANewGame() {
-    return startANewGame(NAME_PLAYER_ONE, NAME_PLAYER_TWO);
+    return startANewGame(Player.RANDOM_PLAYER_NAME_ONE, Player.RANDOM_PLAYER_NAME_TWO);
   }
 
   public Game startANewGame(String namePlayerOne, String namePlayerTwo) {
     Game game = new Game();
+    game.startANewGame(namePlayerOne, namePlayerTwo);
     game.setDeck(deckProxy.getNewShuffledDeck());
-
-    // Choose which players goes first
-    Random random = new Random();
-
-    if (random.nextBoolean()) {
-      game.switchCurrentPlayer();
-    }
 
     return game;
   }
 
-  public Game playOneCard(@NotNull @Valid Game game) {
+  public Game playOneCard(Game game) {
 
     // Current player places card on table
     Card card = deckProxy.dealOneCard(game.getDeck().getId(), 1).getCards().get(0);

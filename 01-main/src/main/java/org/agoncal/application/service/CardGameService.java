@@ -43,8 +43,6 @@ import org.agoncal.application.model.Game;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.Random;
 
 import static org.agoncal.application.model.Game.NAME_PLAYER_ONE;
@@ -61,30 +59,12 @@ public class CardGameService {
   // =              Methods               =
   // ======================================
 
-  public Game playAGame() {
-    Game game = new Game();
-    game.setDeck(deckService.getNewShuffledDeck());
-
-    while (!game.isOver()) {
-      Card card = deckService.dealOneCard(game.getDeck().getId()).getCards().get(0);
-      game.currentPlayerPlaysOneCard(card);
-
-      if (game.twoLastSuitsAreEquivalent()) {
-        game.currentPlayerWon();
-      } else {
-        game.switchCurrentPlayer();
-      }
-    }
-
-    return game;
-  }
-
   public Game startANewGame() {
     return startANewGame(NAME_PLAYER_ONE, NAME_PLAYER_TWO);
   }
 
   public Game startANewGame(String namePlayerOne, String namePlayerTwo) {
-    Game game = new Game();
+    Game game = new Game(namePlayerOne, namePlayerTwo);
     game.setDeck(deckService.getNewShuffledDeck());
 
     // Choose which players goes first
@@ -97,7 +77,7 @@ public class CardGameService {
     return game;
   }
 
-  public Game playOneCard(@NotNull @Valid Game game) {
+  public Game playOneCard(Game game) {
 
     // Current player places card on table
     Card card = deckService.dealOneCard(game.getDeck().getId()).getCards().get(0);

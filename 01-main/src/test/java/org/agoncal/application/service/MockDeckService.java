@@ -1,9 +1,7 @@
 package org.agoncal.application.service;
 
-import io.quarkus.test.Mock;
 import org.agoncal.application.model.Card;
 import org.agoncal.application.model.Deck;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -13,8 +11,6 @@ import static org.agoncal.application.model.Suit.DIAMONDS;
 import static org.agoncal.application.model.Suit.HEARTS;
 import static org.agoncal.application.model.Suit.SPADES;
 
-@Mock
-@RestClient
 public class MockDeckService implements DeckService {
 
   @Override

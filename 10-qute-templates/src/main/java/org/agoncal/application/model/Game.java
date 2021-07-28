@@ -2,8 +2,11 @@ package org.agoncal.application.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.agoncal.application.model.Deck.NUMBER_OF_CARDS;
+import static org.agoncal.application.model.Player.RANDOM_PLAYER_NAME_ONE;
+import static org.agoncal.application.model.Player.RANDOM_PLAYER_NAME_TWO;
 
 public class Game {
 
@@ -19,31 +22,39 @@ public class Game {
   private List<Card> table = new ArrayList<>();
   private boolean over;
 
-  public static final String NAME_PLAYER_ONE = "Alice";
-  public static final String NAME_PLAYER_TWO = "Bob";
-
   // ======================================
   // =            Constructors            =
   // ======================================
-
-  public Game() {
-    this(NAME_PLAYER_ONE, NAME_PLAYER_TWO);
-  }
-
-  public Game(String namePlayerOne, String namePlayerTwo) {
-    this.playerOne = new Player(namePlayerOne);
-    this.playerTwo = new Player(namePlayerTwo);
-    this.currentPlayer = playerOne;
-  }
 
   // ======================================
   // =              Methods               =
   // ======================================
 
+  public void startANewGame() {
+    startANewGame(RANDOM_PLAYER_NAME_ONE, RANDOM_PLAYER_NAME_TWO);
+  }
+
+  public void startANewGame(String namePlayerOne, String namePlayerTwo) {
+
+    // Set the player names
+    this.playerOne = namePlayerOne == null ? new Player(RANDOM_PLAYER_NAME_ONE) : new Player(namePlayerOne);
+    this.playerTwo = namePlayerTwo == null ? new Player(RANDOM_PLAYER_NAME_TWO) : new Player(namePlayerTwo);
+    currentPlayer = playerOne;
+
+    // Choose which players goes first
+    Random random = new Random();
+    if (random.nextBoolean()) {
+      switchCurrentPlayer();
+    }
+  }
+
   public void currentPlayerPlaysOneCard(Card card) {
-    this.currentPlayer.playCard(card);
+    if (currentPlayer == playerOne) {
+      this.playerOne.playCard(card);
+    } else {
+      this.playerTwo.playCard(card);
+    }
     this.table.add(card);
-    switchCurrentPlayer();
   }
 
   public boolean twoLastSuitsAreEquivalent() {
@@ -65,10 +76,11 @@ public class Game {
   }
 
   public void switchCurrentPlayer() {
-    if (currentPlayer == playerOne)
+    if (currentPlayer == playerOne) {
       currentPlayer = playerTwo;
-    else if (currentPlayer == playerTwo)
+    } else {
       currentPlayer = playerOne;
+    }
   }
 
   public boolean isOver() {
@@ -77,16 +89,6 @@ public class Game {
     }
 
     return over;
-  }
-
-  public void calculateTheWinner() {
-    if (playerOne.getHandSize() > playerTwo.getHandSize()) {
-      winner = playerOne;
-    } else if (playerTwo.getHandSize() > playerOne.getHandSize()) {
-      winner = playerTwo;
-    } else {
-      winner = null;
-    }
   }
 
   // ======================================

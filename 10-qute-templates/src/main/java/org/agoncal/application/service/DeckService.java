@@ -12,7 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-@RegisterRestClient(configKey = "deck-of-cards-api")
+@RegisterRestClient(configKey = "app.deck-of-cards-api")
 @Path("/api/deck")
 @RegisterProvider(LoggingFilter.class)
 public interface DeckService {
