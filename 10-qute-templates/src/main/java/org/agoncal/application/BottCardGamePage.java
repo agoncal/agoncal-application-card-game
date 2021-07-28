@@ -1,9 +1,8 @@
-package org.agoncal.application.ui;
+package org.agoncal.application;
 
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import org.agoncal.application.model.Game;
-import org.agoncal.application.service.CardGameService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -15,10 +14,11 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/play")
 @ApplicationScoped
-public class CardGamePage {
+@Produces(MediaType.TEXT_HTML)
+public class BottCardGamePage {
 
   @Inject
-  CardGameService service;
+  BottCardGame service;
 
   Game game;
 
@@ -28,7 +28,6 @@ public class CardGamePage {
   }
 
   @GET
-  @Produces(MediaType.TEXT_HTML)
   public TemplateInstance playANewGame(@QueryParam("one") String namePlayerOne, @QueryParam("two") String namePlayerTwo) {
     game = service.startANewGame(namePlayerOne, namePlayerTwo);
     return Templates.play(game);
@@ -36,7 +35,6 @@ public class CardGamePage {
 
   @Path("/next")
   @GET
-  @Produces(MediaType.TEXT_HTML)
   public TemplateInstance nextCard(@QueryParam("deck_id") String deckId) {
     return Templates.play(service.playOneCard(game));
   }

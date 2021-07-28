@@ -1,6 +1,7 @@
 package org.agoncal.application.service;
 
 import io.quarkus.test.junit.QuarkusTest;
+import org.agoncal.application.BottCardGame;
 import org.agoncal.application.model.Card;
 import org.agoncal.application.model.Game;
 import org.agoncal.application.model.Player;
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CardGameServiceTest {
 
   @Inject
-  CardGameService service;
+  BottCardGame service;
 
   @Test
   public void shouldNotPlayANullGame() {

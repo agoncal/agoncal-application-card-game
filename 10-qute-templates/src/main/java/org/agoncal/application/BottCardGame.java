@@ -1,4 +1,4 @@
-package org.agoncal.application.service;
+package org.agoncal.application;
 /*
  * Main class for running the simple card game.
  *
@@ -40,13 +40,14 @@ package org.agoncal.application.service;
 
 import org.agoncal.application.model.Card;
 import org.agoncal.application.model.Game;
+import org.agoncal.application.service.DeckService;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 @ApplicationScoped
-public class CardGameService {
+public class BottCardGame {
 
   @Inject
   Logger logger;

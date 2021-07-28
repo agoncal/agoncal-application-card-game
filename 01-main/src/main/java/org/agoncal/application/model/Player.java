@@ -41,4 +41,9 @@ public class Player {
   public int getHandSize() {
     return hand.size();
   }
+
+  @Override
+  public String toString() {
+    return name;
+  }
 }
