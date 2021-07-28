@@ -12,7 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-@Path("/play")
+@Path("/ui")
 @ApplicationScoped
 @Produces(MediaType.TEXT_HTML)
 public class BottCardGamePage {
@@ -33,7 +33,7 @@ public class BottCardGamePage {
     return Templates.play(game);
   }
 
-  @Path("/next")
+  @Path("/play")
   @GET
   public TemplateInstance nextCard(@QueryParam("deck_id") String deckId) {
     return Templates.play(service.playOneCard(game));

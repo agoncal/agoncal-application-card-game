@@ -14,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 
 @RegisterRestClient(configKey = "app.deck-of-cards-api")
 @Path("/api/deck")
-@RegisterProvider(LoggingFilter.class)
 public interface DeckOfCards {
 
   /**

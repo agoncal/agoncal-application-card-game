@@ -1,11 +1,9 @@
-package org.agoncal.application.service;
+package org.agoncal.application;
 
 import io.quarkus.test.junit.QuarkusTest;
-import org.agoncal.application.BottCardGame;
 import org.agoncal.application.model.Card;
 import org.agoncal.application.model.Game;
 import org.agoncal.application.model.Player;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
@@ -23,37 +21,38 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@QuarkusTest @Disabled
-class CardGameServiceTest {
+@QuarkusTest
+class BottCardGameTest {
 
   @Inject
   BottCardGame service;
 
   @Test
-  public void shouldNotPlayANullGame() {
+  public void shouldStartANewGame() {
+    Game game = service.startANewGame();
+    assertEquals(0, game.getTable().size());
+    assertEquals(0, game.getPlayerOne().getHandSize());
+    assertEquals(0, game.getPlayerTwo().getHandSize());
+    assertNotNull(game.getPlayerOne());
+    assertNotNull(game.getPlayerTwo());
+    assertNotNull(game.getCurrentPlayer());
+    assertNull(game.getWinner());
+    assertNotNull(game.getDeck());
+    assertFalse(game.isOver());
+  }
+
+  @Test
+  public void shouldNotPlayWithANullGame() {
     assertThrows(ConstraintViolationException.class, () -> service.playOneCard(null));
   }
 
   @Test
-  @Disabled("@Valid does not work")
-  public void shouldNotPlayADefaultGame() {
-    Game game = new Game();
-    assertThrows(ConstraintViolationException.class, () -> service.playOneCard(game));
-  }
-
-  @Test
-  public void shouldPlayAGameWithTwoCardsSameSuit() {
-    Game game = new Game();
-    game.getPlayerOne().playCard(new Card());
-    game.getPlayerTwo().playCard(new Card());
-    assertEquals(0, game.getTable().size());
-    assertEquals(1, game.getPlayerOne().getHand().size());
-    assertEquals(1, game.getPlayerTwo().getHand().size());
+  public void shouldPlayTwice() {
+    Game game = service.startANewGame();
+    game = service.playOneCard(game);
+    assertEquals(1, game.getTable().size());
     game = service.playOneCard(game);
     assertEquals(2, game.getTable().size());
-    assertEquals(0, game.getPlayerOne().getHand().size());
-    assertEquals(0, game.getPlayerTwo().getHand().size());
-    assertEquals(game.getPlayerTwo(), game.getWinner());
   }
 
   @Test
@@ -103,19 +102,6 @@ class CardGameServiceTest {
     assertEquals(52, game.getTable().size());
     assertNull(game.getWinner());
   }
-
-  @Test
-  public void shouldStartGame() {
-    Game game = service.startANewGame();
-    assertEquals(0, game.getTable().size());
-    assertEquals(26, game.getPlayerOne().getHandSize());
-    assertEquals(26, game.getPlayerTwo().getHandSize());
-    assertNotNull(game.getPlayerOne());
-    assertNotNull(game.getPlayerTwo());
-    assertNotNull(game.getCurrentPlayer());
-    assertFalse(game.isOver());
-  }
-
 
   @Test
   public void shouldSwitchCurrentPlayer() {

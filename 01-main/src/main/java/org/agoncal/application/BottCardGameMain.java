@@ -32,19 +32,21 @@ public class BottCardGameMain {
   }
 
   private static void displayHand(Player player) {
-    System.out.print("(" + player.getHandSize() + ") " + player.getName() + ":");
+    System.out.printf("(%2s)", player.getHandSize());
+    System.out.printf("%14s", player.getName());
 
     for (Card card : player.getHand()) {
-      System.out.print(String.format("%4s", card));
+      System.out.printf("%4s", card);
     }
     System.out.println();
   }
 
   private static void displayTable(Game game) {
-    System.out.print("(" + game.getTable().size() + ") Table : ");
+    System.out.printf("(%2s)", game.getTable().size());
+    System.out.printf("%14s", "Table");
 
     for (Card card : game.getTable()) {
-      System.out.print(String.format("%4s", card));
+      System.out.printf("%4s", card);
     }
     System.out.println("\n");
   }

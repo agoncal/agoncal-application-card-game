@@ -45,6 +45,7 @@ import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 
 @ApplicationScoped
 public class BottCardGame {
@@ -75,7 +76,7 @@ public class BottCardGame {
     return game;
   }
 
-  public Game playOneCard(Game game) {
+  public Game playOneCard(@NotNull Game game) {
 
     // Current player places card on table
     Card card = deckService.dealOneCard(game.getDeck().getId());
