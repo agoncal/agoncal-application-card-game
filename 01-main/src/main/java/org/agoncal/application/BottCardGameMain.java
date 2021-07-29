@@ -1,6 +1,5 @@
 package org.agoncal.application;
 
-import org.agoncal.application.model.Card;
 import org.agoncal.application.model.Game;
 import org.agoncal.application.model.Player;
 
@@ -34,20 +33,14 @@ public class BottCardGameMain {
   private static void displayHand(Player player) {
     System.out.printf("(%2s)", player.getHandSize());
     System.out.printf("%14s", player.getName());
-
-    for (Card card : player.getHand()) {
-      System.out.printf("%4s", card);
-    }
+    player.getHand().forEach(card -> System.out.printf("%4s", card));
     System.out.println();
   }
 
   private static void displayTable(Game game) {
     System.out.printf("(%2s)", game.getTable().size());
     System.out.printf("%14s", "Table");
-
-    for (Card card : game.getTable()) {
-      System.out.printf("%4s", card);
-    }
+    game.getTable().forEach(card -> System.out.printf("%4s", card));
     System.out.println("\n");
   }
 

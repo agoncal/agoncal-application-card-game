@@ -4,6 +4,7 @@ import com.oblac.nomen.Nomen;
 import org.agoncal.application.model.Card;
 import org.agoncal.application.model.Deck;
 import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -29,11 +30,13 @@ public class DeckService {
   Map<String, Deck> decks = new HashMap<>();
 
   @Fallback(fallbackMethod = "fallbackNewShuffledDeck")
+  @Retry
   public Deck newShuffledDeck() {
     return deckOfCardsProxy.newShuffledDeck();
   }
 
   @Fallback(fallbackMethod = "fallbackDealOneCard")
+  @Retry
   public Card dealOneCard(String deckid) {
     return deckOfCardsProxy.dealOneCard(deckid, 1).getCards().get(0);
   }
