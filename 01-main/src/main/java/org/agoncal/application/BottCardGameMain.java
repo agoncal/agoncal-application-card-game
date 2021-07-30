@@ -31,15 +31,13 @@ public class BottCardGameMain {
   }
 
   private static void displayHand(Player player) {
-    System.out.printf("(%2s)", player.getHandSize());
-    System.out.printf("%14s", player.getName());
+    System.out.printf("(%2s) %14s", player.getHandSize(), player.getName());
     player.getHand().forEach(card -> System.out.printf("%4s", card));
     System.out.println();
   }
 
   private static void displayTable(Game game) {
-    System.out.printf("(%2s)", game.getTable().size());
-    System.out.printf("%14s", "Table");
+    System.out.printf("(%2s) %14s", game.getTable().size(), "Table");
     game.getTable().forEach(card -> System.out.printf("%4s", card));
     System.out.println("\n");
   }
