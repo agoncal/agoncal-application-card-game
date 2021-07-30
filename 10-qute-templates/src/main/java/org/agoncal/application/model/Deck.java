@@ -14,7 +14,7 @@ public class Deck {
 
   @JsonbProperty("deck_id")
   private String id;
-  private int remaining;
+  private Integer remaining;
   private LinkedList<Card> cards = new LinkedList<>();
 
   public static final int NUMBER_OF_CARDS = 52;
@@ -55,11 +55,11 @@ public class Deck {
     this.id = id;
   }
 
-  public int getRemaining() {
-    return remaining;
+  public Integer getRemaining() {
+    return remaining == null ? cards.size() : remaining;
   }
 
-  public void setRemaining(int remaining) {
+  public void setRemaining(Integer remaining) {
     this.remaining = remaining;
   }
 
