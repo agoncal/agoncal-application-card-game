@@ -43,11 +43,11 @@ import org.agoncal.application.model.Game;
 import org.agoncal.application.service.DeckService;
 import org.jboss.logging.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
-@ApplicationScoped
+@RequestScoped
 public class BottCardGame {
 
   @Inject
@@ -80,6 +80,8 @@ public class BottCardGame {
 
     // Current player places card on table
     Card card = deckService.dealOneCard(game.getDeck().getId());
+    logger.debug("Deck " + game.getDeck().getId() + " remains " + game.getDeck().getRemaining() + " cards");
+
     game.currentPlayerPlaysOneCard(card);
     logger.debug(game.getCurrentPlayer().getName() + " plays a " + card + " table has now " + game.getTable().size() + "cards");
 
