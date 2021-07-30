@@ -57,7 +57,7 @@ class BottCardGameTest {
 
   @Test
   public void shouldPlayAGameWithFourCardsSameSuit() {
-    Game game = new Game();
+    Game game = service.startANewGame();
     game.getPlayerOne().playCard(new Card(1, CLUBS));
     game.getPlayerTwo().playCard(new Card(2, DIAMONDS));
     game.getPlayerOne().playCard(new Card());
@@ -74,7 +74,7 @@ class BottCardGameTest {
 
   @Test
   public void shouldPlayAGameWithFiveCardsSameSuit() {
-    Game game = new Game();
+    Game game = service.startANewGame();
     game.getPlayerOne().playCard(new Card(1, CLUBS));
     game.getPlayerTwo().playCard(new Card(2, DIAMONDS));
     game.getPlayerOne().playCard(new Card(3, HEARTS));
@@ -92,7 +92,7 @@ class BottCardGameTest {
 
   @Test
   public void shouldPlayAGameWithNoEquivalentSuit() {
-    Game game = new Game();
+    Game game = service.startANewGame();
     for (int i = 0; i < 30; i++) {
       game.getPlayerOne().playCard(new Card(1, CLUBS));
       game.getPlayerTwo().playCard(new Card(2, DIAMONDS));
