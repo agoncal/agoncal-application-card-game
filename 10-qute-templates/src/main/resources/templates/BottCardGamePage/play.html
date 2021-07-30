@@ -59,6 +59,7 @@
 <footer class="footer mt-auto py-3 bg-light">
   <div class="container">
     <p class="text-muted">Table: {game.table.size}</p>
+    <p class="text-muted">Remaining cards in deck: {game.deck.remaining}</p>
     <p class="text-muted">Player one: {game.playerOne.name}
       {#for card in game.playerOne.hand}
         {card}
